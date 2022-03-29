@@ -47,19 +47,19 @@ namespace OfficeSoftware
                 var birthdayMarquee = html.Load("http://10.67.0.4/pecc4/GUI/Pages/Article.aspx");
                 //var doc = html.Load("http://113.160.248.233/lichtuan/")  http://10.67.0.6/lichtuan/;
 
-                var birthdayHTML = birthdayMarquee.DocumentNode.SelectSingleNode("//marquee");
-                var birthdayRaw = birthdayHTML.Descendants("font")
-                            .Select(td => WebUtility.HtmlDecode(td.InnerText.Trim()))
-                            .ToList();
+                //var birthdayHTML = birthdayMarquee.DocumentNode.SelectSingleNode("//marquee");
+                //var birthdayRaw = birthdayHTML.Descendants("font")
+                //            .Select(td => WebUtility.HtmlDecode(td.InnerText.Trim()))
+                //            .ToList();
 
-                birthdayString = "Chúc Mừng Sinh Nhật:&nbsp&nbsp&nbsp";
-                foreach (var item in birthdayRaw)
-                {
-                    var indexTemp = item.IndexOf(')');
-                    var stringItem = item.Substring(indexTemp + 2);
-                    birthdayString += stringItem;
-                    birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
-                }
+                //birthdayString = "Chúc Mừng Sinh Nhật:&nbsp&nbsp&nbsp";
+                //foreach (var item in birthdayRaw)
+                //{
+                //    var indexTemp = item.IndexOf(')');
+                //    var stringItem = item.Substring(indexTemp + 2);
+                //    birthdayString += stringItem;
+                //    birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+                //}
 
                 var table = doc.DocumentNode.SelectSingleNode("//table[@id='RadGrid5_ctl00']");
                 DataRaw = table.Descendants("tr")
@@ -274,31 +274,31 @@ namespace OfficeSoftware
 
 
             #endregion
-            try { 
-            #region Webview configurations
-            //to top right, #ffff66 12%, #00ff99 99%
-            var htmlRaw = @"<html> <head>
-                <title>Basic Web Page</title>
-                <style>
-                body {
-                height: 46px;
-                overflow: hidden;
-                background: linear-gradient(to top right, #ffffff 12%, #33ccff 76%)
-                </style>
-                </head> 
-                <body>
-                      <marquee width='100%' direction='left' height='200px' loop='' bgcolor='' style='padding-top: 10px;'>
-                <font face = 'Verdana' size = '4'>" + birthdayString + "</font></marquee></body> </html>";
+            //try { 
+            //#region Webview configurations
+            ////to top right, #ffff66 12%, #00ff99 99%
+            //var htmlRaw = @"<html> <head>
+            //    <title>Basic Web Page</title>
+            //    <style>
+            //    body {
+            //    height: 46px;
+            //    overflow: hidden;
+            //    background: linear-gradient(to top right, #ffffff 12%, #33ccff 76%)
+            //    </style>
+            //    </head> 
+            //    <body>
+            //          <marquee width='100%' direction='left' height='200px' loop='' bgcolor='' style='padding-top: 10px;'>
+            //    <font face = 'Verdana' size = '4'>" + birthdayString + "</font></marquee></body> </html>";
 
-            await webView21.EnsureCoreWebView2Async();
-            webView21.NavigateToString(htmlRaw);
+            //await webView21.EnsureCoreWebView2Async();
+            //webView21.NavigateToString(htmlRaw);
 
-                #endregion
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Lỗi :" + ex.Message.ToString(),"Thông báo", MessageBoxButtons.OK);
-            }
+            //    #endregion
+            //}
+            //catch(Exception ex)
+            //{
+            //    MessageBox.Show("Lỗi :" + ex.Message.ToString(),"Thông báo", MessageBoxButtons.OK);
+            //}
         }
         
 

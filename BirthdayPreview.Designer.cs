@@ -51,26 +51,26 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 49.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 42.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(152, 164);
+            this.label1.Location = new System.Drawing.Point(37, 227);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(884, 100);
+            this.label1.Size = new System.Drawing.Size(914, 100);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Chúc Mừng Sinh Nhật";
+            this.label1.Text = "CHÚC MỪNG SINH NHẬT";
             // 
             // NameLabel
             // 
             this.NameLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.NameLabel.BackColor = System.Drawing.Color.Transparent;
-            this.NameLabel.Font = new System.Drawing.Font("Times New Roman", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.NameLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.NameLabel.Location = new System.Drawing.Point(314, 280);
-            this.NameLabel.MaximumSize = new System.Drawing.Size(750, 80);
+            this.NameLabel.Font = new System.Drawing.Font("Times New Roman", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.NameLabel.ForeColor = System.Drawing.Color.DarkBlue;
+            this.NameLabel.Location = new System.Drawing.Point(178, 366);
+            this.NameLabel.MaximumSize = new System.Drawing.Size(1000, 80);
             this.NameLabel.Name = "NameLabel";
-            this.NameLabel.Size = new System.Drawing.Size(700, 80);
+            this.NameLabel.Size = new System.Drawing.Size(1000, 80);
             this.NameLabel.TabIndex = 1;
-            this.NameLabel.Text = "Ông Họ Và Tên";
+            this.NameLabel.Text = "ÔNG TRƯƠNG HOÀI THẾ TUYÊN";
             this.NameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.NameLabel.Click += new System.EventHandler(this.label2_Click);
             // 
@@ -78,14 +78,13 @@
             // 
             this.DepartmentLable.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.DepartmentLable.BackColor = System.Drawing.Color.Transparent;
-            this.DepartmentLable.Font = new System.Drawing.Font("Times New Roman", 31.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.DepartmentLable.Font = new System.Drawing.Font("Times New Roman", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.DepartmentLable.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.DepartmentLable.Location = new System.Drawing.Point(42, 501);
-            this.DepartmentLable.MaximumSize = new System.Drawing.Size(1220, 125);
+            this.DepartmentLable.Location = new System.Drawing.Point(88, 571);
+            this.DepartmentLable.MaximumSize = new System.Drawing.Size(1190, 125);
             this.DepartmentLable.Name = "DepartmentLable";
-            this.DepartmentLable.Size = new System.Drawing.Size(1220, 125);
+            this.DepartmentLable.Size = new System.Drawing.Size(1172, 125);
             this.DepartmentLable.TabIndex = 1;
-            this.DepartmentLable.Text = "Phòng ban";
             this.DepartmentLable.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.DepartmentLable.Click += new System.EventHandler(this.label2_Click);
             // 
@@ -99,7 +98,7 @@
             this.ImageSlider.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ImageSlider.Location = new System.Drawing.Point(0, 0);
             this.ImageSlider.Name = "ImageSlider";
-            this.ImageSlider.Size = new System.Drawing.Size(1315, 698);
+            this.ImageSlider.Size = new System.Drawing.Size(1440, 832);
             this.ImageSlider.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ImageSlider.TabIndex = 3;
             this.ImageSlider.TabStop = false;
@@ -115,12 +114,12 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(150, 601);
+            this.label2.Location = new System.Drawing.Point(63, 668);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(128, 60);
+            this.label2.Size = new System.Drawing.Size(139, 60);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Ngày";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label2.Text = "NGÀY";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
@@ -129,12 +128,12 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label3.ForeColor = System.Drawing.Color.Red;
-            this.label3.Location = new System.Drawing.Point(325, 601);
+            this.label3.Location = new System.Drawing.Point(388, 668);
             this.label3.MaximumSize = new System.Drawing.Size(190, 60);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(130, 60);
+            this.label3.Size = new System.Drawing.Size(170, 60);
             this.label3.TabIndex = 1;
-            this.label3.Text = "Tháng";
+            this.label3.Text = "THÁNG";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label3.Click += new System.EventHandler(this.label2_Click);
             // 
@@ -144,11 +143,11 @@
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(509, 601);
+            this.label4.Location = new System.Drawing.Point(598, 668);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(108, 60);
+            this.label4.Size = new System.Drawing.Size(119, 60);
             this.label4.TabIndex = 1;
-            this.label4.Text = "Năm";
+            this.label4.Text = "NĂM";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label4.Click += new System.EventHandler(this.label2_Click);
             // 
@@ -158,7 +157,7 @@
             this.dayNow.BackColor = System.Drawing.Color.Transparent;
             this.dayNow.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dayNow.ForeColor = System.Drawing.Color.Red;
-            this.dayNow.Location = new System.Drawing.Point(262, 601);
+            this.dayNow.Location = new System.Drawing.Point(325, 668);
             this.dayNow.Name = "dayNow";
             this.dayNow.Size = new System.Drawing.Size(62, 60);
             this.dayNow.TabIndex = 1;
@@ -172,7 +171,7 @@
             this.monthNow.BackColor = System.Drawing.Color.Transparent;
             this.monthNow.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.monthNow.ForeColor = System.Drawing.Color.Red;
-            this.monthNow.Location = new System.Drawing.Point(450, 601);
+            this.monthNow.Location = new System.Drawing.Point(544, 668);
             this.monthNow.MaximumSize = new System.Drawing.Size(200, 60);
             this.monthNow.Name = "monthNow";
             this.monthNow.Size = new System.Drawing.Size(69, 60);
@@ -189,14 +188,14 @@
             // 
             this.PositionLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PositionLabel.BackColor = System.Drawing.Color.Transparent;
-            this.PositionLabel.Font = new System.Drawing.Font("Times New Roman", 31.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.PositionLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.PositionLabel.Location = new System.Drawing.Point(42, 394);
-            this.PositionLabel.MaximumSize = new System.Drawing.Size(1220, 125);
+            this.PositionLabel.Font = new System.Drawing.Font("Times New Roman", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.PositionLabel.ForeColor = System.Drawing.Color.DarkBlue;
+            this.PositionLabel.Location = new System.Drawing.Point(37, 446);
+            this.PositionLabel.MaximumSize = new System.Drawing.Size(1190, 125);
             this.PositionLabel.Name = "PositionLabel";
-            this.PositionLabel.Size = new System.Drawing.Size(1220, 125);
+            this.PositionLabel.Size = new System.Drawing.Size(1172, 125);
             this.PositionLabel.TabIndex = 1;
-            this.PositionLabel.Text = "Phòng ban";
+            this.PositionLabel.Text = "PHÓ GIÁM ĐỐC TRUNG TÂM TVXD THỦY ĐIỆN VÀ NĂNG LƯỢNG TÁI TẠO";
             this.PositionLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.PositionLabel.Click += new System.EventHandler(this.label2_Click);
             // 
@@ -206,7 +205,7 @@
             this.yearNow.BackColor = System.Drawing.Color.Transparent;
             this.yearNow.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.yearNow.ForeColor = System.Drawing.Color.Red;
-            this.yearNow.Location = new System.Drawing.Point(610, 601);
+            this.yearNow.Location = new System.Drawing.Point(710, 668);
             this.yearNow.Name = "yearNow";
             this.yearNow.Size = new System.Drawing.Size(103, 60);
             this.yearNow.TabIndex = 1;
@@ -220,7 +219,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1315, 698);
+            this.ClientSize = new System.Drawing.Size(1440, 832);
             this.ControlBox = false;
             this.Controls.Add(this.dayNow);
             this.Controls.Add(this.label2);

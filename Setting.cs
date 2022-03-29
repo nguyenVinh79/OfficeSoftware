@@ -86,9 +86,10 @@ namespace OfficeSoftware
                             employee.Add(new BirthdayEntity
                             {
                                 Name = BirthdaySheet.Cells[row, 2].Value?.ToString().Trim(),
-                                Date = DateTime.FromOADate(Convert.ToUInt64(BirthdaySheet.Cells[row, 11].Value?.ToString().Trim())).ToString("MM/dd/yyyy"),
+                                Date = DateTime.FromOADate(Convert.ToUInt64(BirthdaySheet.Cells[row, 11].Value?.ToString().Trim())).ToString("dd/MM/yyyy"),
                                 Position = BirthdaySheet.Cells[row, 8].Value?.ToString().Trim(),
-                                Department = BirthdaySheet.Cells[row, 4].Value == null ? string.Empty : BirthdaySheet.Cells[row, 4].Value.ToString().Trim()
+                                Department = BirthdaySheet.Cells[row, 4].Value == null ? string.Empty : BirthdaySheet.Cells[row, 4].Value.ToString().Trim(),
+                                Gender = BirthdaySheet.Cells[row, 31].Value == null ? string.Empty : BirthdaySheet.Cells[row, 31].Value.ToString().Trim()
                             });
                         }
                         package.Dispose();
@@ -110,6 +111,7 @@ namespace OfficeSoftware
                             BirthdaySheet.Cells[excelRow, 2].Value = item.Date;
                             BirthdaySheet.Cells[excelRow, 3].Value = item.Position;
                             BirthdaySheet.Cells[excelRow, 4].Value = item.Department;
+                            BirthdaySheet.Cells[excelRow, 5].Value = item.Gender;
                             excelRow++;
                         }
 

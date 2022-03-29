@@ -16,11 +16,14 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using OfficeSoftware.Model;
 using System.Globalization;
+using HtmlAgilityPack;
+using System.Net;
 
 namespace OfficeSoftware
 {
     public partial class Form1 : Form
     {
+        string birthdayString;
         private Form currentChildForm;
         WebBrowser wb;
         public BirthdayForm bdform = new BirthdayForm();
@@ -43,7 +46,7 @@ namespace OfficeSoftware
             WindowState = FormWindowState.Maximized;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
 
             AutoHideTimer.Enabled = true;
@@ -98,6 +101,56 @@ namespace OfficeSoftware
                 SlideTimer.Enabled = true;
             }
 
+            var html = new HtmlWeb();
+            var birthdayMarquee = html.Load("http://10.67.0.4/pecc4/GUI/Pages/Article.aspx");
+            var birthdayHTML = birthdayMarquee.DocumentNode.SelectSingleNode("//marquee");
+            var birthdayRaw = birthdayHTML.Descendants("font")
+                        .Select(td => WebUtility.HtmlDecode(td.InnerText.Trim()))
+                        .ToList();
+
+            birthdayString = "CHÚC MỪNG SINH NHẬT:&nbsp&nbsp&nbsp&#127873&nbsp&nbsp&nbsp";
+            foreach (var item in birthdayRaw)
+            {
+                var indexTemp = item.IndexOf(')');
+                var stringItem = item.Substring(indexTemp + 2);
+
+                var indexDay = stringItem.IndexOf('(');
+                var indexCharacter = stringItem.IndexOf('/');
+                var checkDay = stringItem.Substring(indexDay + 1, indexCharacter-1-indexDay) ;
+                if (Convert.ToInt32(checkDay) >= DateTime.Now.Day)
+                {
+                    birthdayString += stringItem;
+                    birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+                }
+            }
+
+            try
+            {
+                #region Webview configurations
+                //to top right, #ffff66 12%, #00ff99 99%
+                var htmlRaw = @"<html> <head>
+                <title>Basic Web Page</title>
+                <style>
+                body {
+                height: 46px;
+                overflow: hidden;
+                background: linear-gradient(to top right, #ffffff 12%, #33ccff 76%)
+                </style>
+                </head> 
+                <body>
+                      <marquee width='100%' direction='left' height='200px' loop='' bgcolor='' style='padding-top: 10px;'>
+                <font face = 'Verdana' size = '4'>" + birthdayString + "</font></marquee></body> </html>";
+
+                await webView21.EnsureCoreWebView2Async();
+                webView21.NavigateToString(htmlRaw);
+
+                panel1.BringToFront();
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi :" + ex.Message.ToString(), "Thông báo", MessageBoxButtons.OK);
+            }
         }
 
         private void BirthdayTimer_Tick(object sender, EventArgs e)
@@ -165,6 +218,13 @@ namespace OfficeSoftware
             MainPanel.Tag = childForm;
             childForm.BringToFront();
             childForm.Show();
+
+            if (childForm.Name == "BadNews" || childForm.Name == "ImageGallery" || childForm.Name == "Setting")
+            {
+
+            }
+            else
+                panel1.BringToFront();
         }
         private void OpenAnnounceForm(Form childForm)
         {
