@@ -18,6 +18,7 @@ using OfficeSoftware.Model;
 using System.Globalization;
 using HtmlAgilityPack;
 using System.Net;
+using System.Data.SqlClient;
 
 namespace OfficeSoftware
 {
@@ -37,6 +38,10 @@ namespace OfficeSoftware
         protected bool isBadnewsShow;
         protected bool isEventShow;
         protected bool isImageSlideShow;
+        string connectString = @"server=TVD4SRVR04\SQLSERVER2K8R2;multipleactiveresultsets=true;database=Pecc4Web;user id=sa;password=abc@123";
+
+        //@"Data Source=TVD4SRVR04\SQLSERVER2K8R2;multipleactiveresultsets=true;Initial Catalog=Pecc4Web;User ID=sa;Password=abc@123;Integrated Security=true";
+        List<BirthdayEntity> EmployeeBirthdayList = new List<BirthdayEntity>();
 
         FileInfo existingFile = new FileInfo(Directory.GetCurrentDirectory() + "\\" + "Lichtuan_autoUpdateFromWebData.xlsx");
 
@@ -48,6 +53,24 @@ namespace OfficeSoftware
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+            var connection = new SqlConnection(connectString);
+            var sql = "SELECT EmployeeName, Department, CONVERT(VARCHAR(10),dbo.Employee.BirthDay ,103) AS Birthday FROM dbo.Employee";
+
+            SqlDataAdapter employeeData = new SqlDataAdapter(sql, connection);
+            var dtEmployee = new DataTable();
+
+            employeeData.Fill(dtEmployee);
+
+            
+            foreach(DataRow dataRow in dtEmployee.Rows)
+            {
+                EmployeeBirthdayList.Add(new BirthdayEntity {
+                Name = $"{ dataRow["EmployeeName"]}",
+                Department = $"{dataRow["Department"] }",
+                Date = $"{dataRow["Birthday"]}"
+
+                });
+            }    
 
             AutoHideTimer.Enabled = true;
             ShowBtn.Text = "Dừng";
@@ -102,26 +125,27 @@ namespace OfficeSoftware
             }
 
             var html = new HtmlWeb();
-            var birthdayMarquee = html.Load("http://10.67.0.4/pecc4/GUI/Pages/Article.aspx");
-            var birthdayHTML = birthdayMarquee.DocumentNode.SelectSingleNode("//marquee");
-            var birthdayRaw = birthdayHTML.Descendants("font")
-                        .Select(td => WebUtility.HtmlDecode(td.InnerText.Trim()))
-                        .ToList();
+            //var birthdayMarquee = html.Load("http://10.67.0.4/pecc4/GUI/Pages/Article.aspx");
+            //var birthdayHTML = birthdayMarquee.DocumentNode.SelectSingleNode("//marquee");
+            //var birthdayRaw = birthdayHTML.Descendants("font")
+            //            .Select(td => WebUtility.HtmlDecode(td.InnerText.Trim()))
+            //            .ToList();
 
-            birthdayString = "CHÚC MỪNG SINH NHẬT:&nbsp&nbsp&nbsp&#127873&nbsp&nbsp&nbsp";
-            foreach (var item in birthdayRaw)
+            //birthdayString = "CHÚC MỪNG SINH NHẬT:&nbsp&nbsp&nbsp&#127873&nbsp&nbsp&nbsp";
+            //birthdayString += "Lê Dũng-ĐKS(1/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+            //birthdayString += "Hoàng Quốc Khải-P3(1/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+            //birthdayString += "Trần Trương Hân-P6(1/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+            //birthdayString += "Trần Thanh Trường-VP(2/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+
+            var BirthdayInMonthList = EmployeeBirthdayList.Where(x => (Convert.ToDateTime(x.Date).Month == DateTime.Now.Month) &&
+                (Convert.ToDateTime(x.Date).Day >= DateTime.Now.Day)).ToList();
+
+            foreach (var item in BirthdayInMonthList)
             {
-                var indexTemp = item.IndexOf(')');
-                var stringItem = item.Substring(indexTemp + 2);
+                
 
-                var indexDay = stringItem.IndexOf('(');
-                var indexCharacter = stringItem.IndexOf('/');
-                var checkDay = stringItem.Substring(indexDay + 1, indexCharacter-1-indexDay) ;
-                if (Convert.ToInt32(checkDay) >= DateTime.Now.Day)
-                {
-                    birthdayString += stringItem;
-                    birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
-                }
+                birthdayString += item.Name+"-"+item.Department + " ("+ item.Date.Substring(0,5) +")";
+                birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
             }
 
             try
@@ -144,13 +168,15 @@ namespace OfficeSoftware
                 await webView21.EnsureCoreWebView2Async();
                 webView21.NavigateToString(htmlRaw);
 
-                panel1.BringToFront();
+                /* panel1.BringToFront();*/
+                
                 #endregion
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi :" + ex.Message.ToString(), "Thông báo", MessageBoxButtons.OK);
             }
+            
         }
 
         private void BirthdayTimer_Tick(object sender, EventArgs e)

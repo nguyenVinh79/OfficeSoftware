@@ -85,9 +85,9 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(5, 2);
+            this.pictureBox1.Location = new System.Drawing.Point(7, 5);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(138, 48);
+            this.pictureBox1.Size = new System.Drawing.Size(158, 42);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -103,7 +103,7 @@
             this.SettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SettingButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SettingButton.ForeColor = System.Drawing.Color.White;
-            this.SettingButton.Location = new System.Drawing.Point(1007, 4);
+            this.SettingButton.Location = new System.Drawing.Point(1045, 4);
             this.SettingButton.Name = "SettingButton";
             this.SettingButton.Size = new System.Drawing.Size(116, 42);
             this.SettingButton.TabIndex = 0;
@@ -123,7 +123,7 @@
             this.ImageSettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ImageSettingButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ImageSettingButton.ForeColor = System.Drawing.Color.White;
-            this.ImageSettingButton.Location = new System.Drawing.Point(875, 4);
+            this.ImageSettingButton.Location = new System.Drawing.Point(913, 4);
             this.ImageSettingButton.Name = "ImageSettingButton";
             this.ImageSettingButton.Size = new System.Drawing.Size(116, 42);
             this.ImageSettingButton.TabIndex = 0;
@@ -143,7 +143,7 @@
             this.ImageSlideButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ImageSlideButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ImageSlideButton.ForeColor = System.Drawing.Color.White;
-            this.ImageSlideButton.Location = new System.Drawing.Point(752, 4);
+            this.ImageSlideButton.Location = new System.Drawing.Point(790, 4);
             this.ImageSlideButton.Name = "ImageSlideButton";
             this.ImageSlideButton.Size = new System.Drawing.Size(107, 42);
             this.ImageSlideButton.TabIndex = 0;
@@ -163,7 +163,7 @@
             this.EventButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EventButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.EventButton.ForeColor = System.Drawing.Color.White;
-            this.EventButton.Location = new System.Drawing.Point(629, 4);
+            this.EventButton.Location = new System.Drawing.Point(667, 4);
             this.EventButton.Name = "EventButton";
             this.EventButton.Size = new System.Drawing.Size(107, 42);
             this.EventButton.TabIndex = 0;
@@ -183,7 +183,7 @@
             this.badNewsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.badNewsButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.badNewsButton.ForeColor = System.Drawing.Color.White;
-            this.badNewsButton.Location = new System.Drawing.Point(506, 4);
+            this.badNewsButton.Location = new System.Drawing.Point(544, 4);
             this.badNewsButton.Name = "badNewsButton";
             this.badNewsButton.Size = new System.Drawing.Size(107, 42);
             this.badNewsButton.TabIndex = 0;
@@ -203,7 +203,7 @@
             this.birthdayButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.birthdayButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.birthdayButton.ForeColor = System.Drawing.Color.White;
-            this.birthdayButton.Location = new System.Drawing.Point(383, 4);
+            this.birthdayButton.Location = new System.Drawing.Point(421, 4);
             this.birthdayButton.Name = "birthdayButton";
             this.birthdayButton.Size = new System.Drawing.Size(107, 42);
             this.birthdayButton.TabIndex = 0;
@@ -223,7 +223,7 @@
             this.CalendarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CalendarButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CalendarButton.ForeColor = System.Drawing.Color.White;
-            this.CalendarButton.Location = new System.Drawing.Point(260, 4);
+            this.CalendarButton.Location = new System.Drawing.Point(298, 4);
             this.CalendarButton.Name = "CalendarButton";
             this.CalendarButton.Size = new System.Drawing.Size(107, 42);
             this.CalendarButton.TabIndex = 0;
@@ -278,7 +278,7 @@
             // 
             this.ShowBtn.BackColor = System.Drawing.Color.Lime;
             this.ShowBtn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ShowBtn.Location = new System.Drawing.Point(1139, 4);
+            this.ShowBtn.Location = new System.Drawing.Point(1177, 4);
             this.ShowBtn.Name = "ShowBtn";
             this.ShowBtn.Size = new System.Drawing.Size(123, 42);
             this.ShowBtn.TabIndex = 5;

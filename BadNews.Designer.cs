@@ -30,7 +30,6 @@
         {
             this.TitleLable = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -64,17 +63,6 @@
             this.label2.Size = new System.Drawing.Size(1046, 49);
             this.label2.TabIndex = 1;
             this.label2.Text = "CÔNG TY CP TƯ VẤN XÂY DỰNG ĐIỆN 4 BÁO TIN";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label3.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(42, 250);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(144, 46);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Ông/Bà";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
             // 
@@ -124,7 +112,7 @@
             // 
             this.NameText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.NameText.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.NameText.Location = new System.Drawing.Point(178, 250);
+            this.NameText.Location = new System.Drawing.Point(42, 250);
             this.NameText.MaximumSize = new System.Drawing.Size(790, 50);
             this.NameText.Name = "NameText";
             this.NameText.Size = new System.Drawing.Size(790, 50);
@@ -213,7 +201,6 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TitleLable);
             this.Name = "BadNews";
@@ -228,7 +215,6 @@
         #endregion
         private System.Windows.Forms.Label TitleLable;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;

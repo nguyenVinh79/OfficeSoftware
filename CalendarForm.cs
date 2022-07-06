@@ -12,6 +12,8 @@ using HtmlAgilityPack;
 using System.Linq;
 using System.Net;
 using OfficeSoftware.Model;
+using Newtonsoft.Json;
+using System.Globalization;
 
 namespace OfficeSoftware
 {
@@ -22,6 +24,7 @@ namespace OfficeSoftware
         string birthdayString;
         int DTGVShowTurn = 0;
         protected List<List<string>> DataRaw;
+        List<MeetingCalendar> CalendarRawList = new List<MeetingCalendar>();
         public CalendarForm()
         {
             InitializeComponent();
@@ -47,19 +50,6 @@ namespace OfficeSoftware
                 var birthdayMarquee = html.Load("http://10.67.0.4/pecc4/GUI/Pages/Article.aspx");
                 //var doc = html.Load("http://113.160.248.233/lichtuan/")  http://10.67.0.6/lichtuan/;
 
-                //var birthdayHTML = birthdayMarquee.DocumentNode.SelectSingleNode("//marquee");
-                //var birthdayRaw = birthdayHTML.Descendants("font")
-                //            .Select(td => WebUtility.HtmlDecode(td.InnerText.Trim()))
-                //            .ToList();
-
-                //birthdayString = "Chúc Mừng Sinh Nhật:&nbsp&nbsp&nbsp";
-                //foreach (var item in birthdayRaw)
-                //{
-                //    var indexTemp = item.IndexOf(')');
-                //    var stringItem = item.Substring(indexTemp + 2);
-                //    birthdayString += stringItem;
-                //    birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
-                //}
 
                 var table = doc.DocumentNode.SelectSingleNode("//table[@id='RadGrid5_ctl00']");
                 DataRaw = table.Descendants("tr")
@@ -68,46 +58,107 @@ namespace OfficeSoftware
                                             .Select(td => WebUtility.HtmlDecode(td.InnerText).Trim())
                                             .ToList())
                             .ToList();
+
+                WebClient client = new WebClient();
+                var userDataPara = new UserLoginDOffice() {
+                    username="pecc4\\vinhnn",
+                    password = "pecc4evn",
+                    expiration = 60,
+                    deviceInfo = new DeviceInfoDoffice()
+                    {
+                        deviceId= "test",
+                        deviceType= "crawlData",
+                        appId = "DOFFICE",
+                        appVersion = "v2.0.0"
+                    }
+                };
+                string data = JsonConvert.SerializeObject(userDataPara);
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                string respond = client.UploadString("https://gwdoffice.pecc4.vn/v2/auth/Auth/DAuth", "POST", data);
+
+                //if (respond ==  "true")
+                //{
+                //    string json = client.DownloadString("https://gwdoffice.pecc4.vn/v2/auth/Auth/DAuth");
+                //}    
+
+                UserInfo userInfo = JsonConvert.DeserializeObject<UserInfo>(respond);
+
+                client.Headers[HttpRequestHeader.Authorization] = "Bearer "+ userInfo.Data.accessToken;
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+
+                string currentDay = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                string sevenDayafter = DateTime.Now.AddDays(7.0).ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+                CalendarRequest calendarRequest = new CalendarRequest() {
+                    ID_DV = "404",
+                    TU_NGAY = currentDay,
+                    DEN_NGAY = sevenDayafter,
+                    LOAI_LICH = "Lịch Ban",
+                    TINH_TRANG = "BO_SUNG",
+                    ID_PB_DK = 0,
+                    ID_NV_DK = 0,
+                    HNTH = 0,
+                    MAY_CHIEU = 0,
+                    CHU_TRI = "ALL",
+                    ID_CHU_TRI = 0,
+                    THANH_PHAN = "ALL",
+                    ID_THANH_PHAN = 0,
+                    CHUAN_BI = "ALL",
+                    ID_CHUAN_BI = 0
+                };
+
+                string calendarRequestJson = JsonConvert.SerializeObject(calendarRequest);
+                string CalendarResultString = client.UploadString("https://gwdoffice.pecc4.vn/v1/lichtuan/LichTuan/SelectLichTuan", "POST", calendarRequestJson);
+                CalendarDetailInfo CalendarObj = JsonConvert.DeserializeObject<CalendarDetailInfo>(CalendarResultString);
+
+                if(CalendarObj != null)
+                {
+                    if(CalendarObj.Message == "200")
+                    {
+                        if (CalendarObj.Data.Count > 0)
+                        {
+                            foreach (var calendarItem in CalendarObj.Data)
+                            {
+                                DateTime startTime = DateTime.ParseExact(calendarItem.THOI_GIAN_BD, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime();
+                                var meetingDay = ((DayDetail)((int)startTime.DayOfWeek)).GetEnumDescription();
+                                meetingDay += $" ({startTime.Day}/{startTime.Month})";
+                                string minuteMeeting = startTime.Minute < 10 ? "0" + startTime.Minute.ToString() : startTime.Minute.ToString();
+                                string meetingTime = $"{startTime.Hour}h{minuteMeeting}";
+                                string meetingPrepare = "";
+                                string meetingHost = calendarItem.CHU_TRI;
+                                string meetingParticipant = "";
+
+                                foreach (var prepareItem in calendarItem.CHUAN_BI)
+                                {
+                                    meetingPrepare += prepareItem.TEN + "\r\n";
+                                }
+
+                                foreach (var participantItem in calendarItem.THANH_PHAN)
+                                {
+                                    meetingParticipant += participantItem.TEN + "\r\n";
+                                }
+
+                                CalendarRawList.Add(new MeetingCalendar {
+                                    Date = meetingDay,
+                                    Time = meetingTime,
+                                    Room = calendarItem.ID_PHONG_HOP.TEN_PHONG,
+                                    Content = calendarItem.NOI_DUNG,
+                                    Prepare = meetingPrepare,
+                                    Host = meetingHost,
+                                    Participants = meetingParticipant
+                                });
+                            }
+                        }
+                    }    
+                }    
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Vui lòng kiểm tra kết nối VPN trước khi chạy phần mềm","Lỗi khởi tạo", MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
 
-            var CalendarRawList = new List<Calendar>();
-            string dayTemp = "";
 
-            foreach (var item in DataRaw)
-            {
-                if (item.Count == 9)
-                {
-                    dayTemp = item[0];
-
-                    CalendarRawList.Add(new Calendar
-                    {
-                        Date = item[0],
-                        Time = item[1],
-                        Room = item[2],
-                        Content = item[3],
-                        Prepare = item[4],
-                        Host = item[5],
-                        Participants = item[6]
-                    });
-                }
-                if (item.Count == 8)
-                {
-                    CalendarRawList.Add(new Calendar
-                    {
-                        Date = dayTemp,
-                        Time = item[0],
-                        Room = item[1],
-                        Content = item[2],
-                        Prepare = item[3],
-                        Host = item[4],
-                        Participants = item[5]
-                    });
-                }
-            }
             #endregion
 
             #region DTGV data
@@ -188,7 +239,7 @@ namespace OfficeSoftware
                 rows = rows.Where(r => r.Field<string>("Thứ /Ngày").Contains("Thứ 3") || r.Field<string>("Thứ /Ngày").Contains("Thứ 4") ||
                 r.Field<string>("Thứ /Ngày").Contains("Thứ 5") || r.Field<string>("Thứ /Ngày").Contains("Thứ 6") ||
                 r.Field<string>("Thứ /Ngày").Contains("Thứ 7"));
-                if (rows.Count() > 1)
+                if (rows.Count() >= 1)
                 {
                     dataTbl = rows.CopyToDataTable();
                 }
@@ -198,7 +249,7 @@ namespace OfficeSoftware
             {
                 rows = rows.Where(r => r.Field<string>("Thứ /Ngày").Contains("Thứ 4") || r.Field<string>("Thứ /Ngày").Contains("Thứ 5") ||
                 r.Field<string>("Thứ /Ngày").Contains("Thứ 6") || r.Field<string>("Thứ /Ngày").Contains("Thứ 7"));
-                if (rows.Count() > 1)
+                if (rows.Count() >= 1)
                 {
                     dataTbl = rows.CopyToDataTable();
                 }
@@ -208,7 +259,7 @@ namespace OfficeSoftware
             {
                 rows = rows.Where(r => r.Field<string>("Thứ /Ngày").Contains("Thứ 5") || r.Field<string>("Thứ /Ngày").Contains("Thứ 6") ||
                 r.Field<string>("Thứ /Ngày").Contains("Thứ 7"));
-                if (rows.Count() > 1)
+                if (rows.Count() >= 1)
                 {
                     dataTbl = rows.CopyToDataTable();
                 }
@@ -219,7 +270,7 @@ namespace OfficeSoftware
                 rows = rows.Where(r => r.Field<string>("Thứ /Ngày").Contains("Thứ 6") || r.Field<string>("Thứ /Ngày").Contains("Thứ 7")
                 );
 
-                if (rows.Count() > 1)
+                if (rows.Count() >= 1)
                 {
                     dataTbl = rows.CopyToDataTable();
                 }
@@ -229,13 +280,13 @@ namespace OfficeSoftware
             if (date == "Saturday")
             {
                 rows = rows.Where(r => r.Field<string>("Thứ /Ngày").Contains("Thứ 7"));
-                if (rows.Count() > 1)
+                if (rows.Count() >= 1)
                 {
                     dataTbl = rows.CopyToDataTable();
                 }
             }
 
-            if (rows.Count() > 1)
+            if (rows.Count() >= 1)
             {
                 dataTbl.AcceptChanges();
                 DataTableShow = dataTbl;
@@ -264,9 +315,9 @@ namespace OfficeSoftware
             DataGridViewColumn calendarColumnHost = CalendarDTGV.Columns[5];
             DataGridViewColumn calendarColumnParticipant = CalendarDTGV.Columns[6];
 
-            calendarColumnDate.Width = 55;
+            calendarColumnDate.Width = 36;
             calendarColumnTime.Width = 28;
-            calendarColumnRoom.Width = 45;
+            calendarColumnRoom.Width = 48;
             calendarColumnContent.Width = 235;
             calendarColumnPrepare.Width = 40;
             calendarColumnHost.Width = 48;
@@ -274,31 +325,7 @@ namespace OfficeSoftware
 
 
             #endregion
-            //try { 
-            //#region Webview configurations
-            ////to top right, #ffff66 12%, #00ff99 99%
-            //var htmlRaw = @"<html> <head>
-            //    <title>Basic Web Page</title>
-            //    <style>
-            //    body {
-            //    height: 46px;
-            //    overflow: hidden;
-            //    background: linear-gradient(to top right, #ffffff 12%, #33ccff 76%)
-            //    </style>
-            //    </head> 
-            //    <body>
-            //          <marquee width='100%' direction='left' height='200px' loop='' bgcolor='' style='padding-top: 10px;'>
-            //    <font face = 'Verdana' size = '4'>" + birthdayString + "</font></marquee></body> </html>";
 
-            //await webView21.EnsureCoreWebView2Async();
-            //webView21.NavigateToString(htmlRaw);
-
-            //    #endregion
-            //}
-            //catch(Exception ex)
-            //{
-            //    MessageBox.Show("Lỗi :" + ex.Message.ToString(),"Thông báo", MessageBoxButtons.OK);
-            //}
         }
         
 
