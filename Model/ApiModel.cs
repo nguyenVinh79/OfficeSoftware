@@ -49,6 +49,7 @@ namespace OfficeSoftware.Model
         public int ID_THANH_PHAN { get; set; }
         public string CHUAN_BI { get; set; }
         public int ID_CHUAN_BI { get; set; }
+       
     }
 
     public class CalendarDetailInfo
@@ -68,6 +69,7 @@ namespace OfficeSoftware.Model
         public List<MeetingPreparation> CHUAN_BI { get; set; }
         public List<Participants> THANH_PHAN { get; set; }
         public RoomID ID_PHONG_HOP { get; set; }
+        public string PHONG_HOP { get; set; }
     }
 
     public class RoomID
@@ -83,5 +85,17 @@ namespace OfficeSoftware.Model
     public class MeetingPreparation
     {
         public string TEN { get; set; }
+    }
+    public class ProcessedCalendarData
+    {
+        public string NOI_DUNG { get; set; }
+        public DateTime THOI_GIAN_BD { get; set; }
+        public DateTime THOI_GIAN_KT { get; set; }
+        public DateTime NGAY_HOP { get; set; }
+        public string CHU_TRI { get; set; }
+        public List<MeetingPreparation> CHUAN_BI { get; set; }
+        public List<Participants> THANH_PHAN { get; set; }
+        public RoomID ID_PHONG_HOP { get; set; }
+        public string PHONG_HOP { get; set; }
     }
 }

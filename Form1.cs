@@ -53,25 +53,31 @@ namespace OfficeSoftware
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            var connection = new SqlConnection(connectString);
-            var sql = "SELECT EmployeeName, Department, CONVERT(VARCHAR(10),dbo.Employee.BirthDay ,103) AS Birthday FROM dbo.Employee";
-
-            SqlDataAdapter employeeData = new SqlDataAdapter(sql, connection);
-            var dtEmployee = new DataTable();
-
-            employeeData.Fill(dtEmployee);
-
-            
-            foreach(DataRow dataRow in dtEmployee.Rows)
+            try
             {
-                EmployeeBirthdayList.Add(new BirthdayEntity {
-                Name = $"{ dataRow["EmployeeName"]}",
-                Department = $"{dataRow["Department"] }",
-                Date = $"{dataRow["Birthday"]}"
+                var connection = new SqlConnection(connectString);
+                var sql = "SELECT EmployeeName, Department, CONVERT(VARCHAR(10),dbo.Employee.BirthDay ,103) AS Birthday FROM dbo.Employee";
 
-                });
-            }    
+                SqlDataAdapter employeeData = new SqlDataAdapter(sql, connection);
+                var dtEmployee = new DataTable();
 
+                employeeData.Fill(dtEmployee);
+
+                foreach (DataRow dataRow in dtEmployee.Rows)
+                {
+                    EmployeeBirthdayList.Add(new BirthdayEntity
+                    {
+                        Name = $"{ dataRow["EmployeeName"]}",
+                        Department = $"{dataRow["Department"] }",
+                        Date = $"{dataRow["Birthday"]}"
+
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi : Không thể truy cập database công ty " +"\r\n Chi tiết lỗi:" + ex.Message.ToString(), "Thông báo", MessageBoxButtons.OK);
+            }
             AutoHideTimer.Enabled = true;
             ShowBtn.Text = "Dừng";
             ShowBtn.BackColor = Color.Red;

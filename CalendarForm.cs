@@ -14,6 +14,7 @@ using System.Net;
 using OfficeSoftware.Model;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace OfficeSoftware
 {
@@ -42,6 +43,84 @@ namespace OfficeSoftware
             //label1.Location = new System.Drawing.Point(960, 10);
             #endregion
 
+            await Task.Run(() => LoadingCalendarTable());
+        }
+        
+
+        private void CalendarDTGV_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            CalendarDTGV.ClearSelection();
+            DTGVRow = CalendarDTGV.Rows.Count;
+            ScrollOffset = DTGVRow / 3;
+            CalendarDTGV.FirstDisplayedScrollingRowIndex = 0;
+            ScrollTimer.Enabled = true;
+        }
+
+        private void CalendarDTGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void CalendarDTGV_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void ScrollTimer_Tick(object sender, EventArgs e)
+        {
+            ScrollTimer.Enabled = false;
+            DTGVShowTurn++;
+            if (DTGVShowTurn == 3)
+            {
+                DTGVShowTurn = 0;
+                CalendarDTGV.FirstDisplayedScrollingRowIndex = 0;
+            }
+            else
+                CalendarDTGV.FirstDisplayedScrollingRowIndex += ScrollOffset;
+            ScrollTimer.Enabled = true;
+        }
+
+       
+
+        private void CalendarDTGV_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            e.AdvancedBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
+            if (e.RowIndex < 1 || e.ColumnIndex < 0)
+                return;
+            if (IsTheSameCellValue(e.ColumnIndex, e.RowIndex))
+            {
+                e.AdvancedBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
+            }
+            else
+            {
+                e.AdvancedBorderStyle.Top = CalendarDTGV.AdvancedCellBorderStyle.Top;
+            }
+        }
+
+        private void CalendarDTGV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex == 0)
+                return;
+            if (IsTheSameCellValue(e.ColumnIndex, e.RowIndex))
+            {
+                e.Value = "";
+                e.FormattingApplied = true;
+            }
+        }
+
+        bool IsTheSameCellValue(int column, int row)
+        {
+            DataGridViewCell cell1 = CalendarDTGV[column, row];
+            DataGridViewCell cell2 = CalendarDTGV[column, row - 1];
+            if (cell1.Value == null || cell2.Value == null)
+            {
+                return false;
+            }
+            return cell1.Value.ToString() == cell2.Value.ToString();
+        }
+
+        private async Task LoadingCalendarTable()
+        {
             try
             {
                 #region get web data
@@ -60,14 +139,15 @@ namespace OfficeSoftware
                             .ToList();
 
                 WebClient client = new WebClient();
-                var userDataPara = new UserLoginDOffice() {
-                    username="pecc4\\vinhnn",
+                var userDataPara = new UserLoginDOffice()
+                {
+                    username = "pecc4\\vinhnn",
                     password = "pecc4evn",
                     expiration = 60,
                     deviceInfo = new DeviceInfoDoffice()
                     {
-                        deviceId= "test",
-                        deviceType= "crawlData",
+                        deviceId = "test",
+                        deviceType = "crawlData",
                         appId = "DOFFICE",
                         appVersion = "v2.0.0"
                     }
@@ -83,18 +163,19 @@ namespace OfficeSoftware
 
                 UserInfo userInfo = JsonConvert.DeserializeObject<UserInfo>(respond);
 
-                client.Headers[HttpRequestHeader.Authorization] = "Bearer "+ userInfo.Data.accessToken;
+                client.Headers[HttpRequestHeader.Authorization] = "Bearer " + userInfo.Data.accessToken;
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
 
                 string currentDay = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
                 string sevenDayafter = DateTime.Now.AddDays(7.0).ToString("yyyy-MM-ddTHH:mm:ssZ");
 
-                CalendarRequest calendarRequest = new CalendarRequest() {
+                CalendarRequest calendarRequest = new CalendarRequest()
+                {
                     ID_DV = "404",
                     TU_NGAY = currentDay,
                     DEN_NGAY = sevenDayafter,
                     LOAI_LICH = "Lịch Ban",
-                    TINH_TRANG = "BO_SUNG",
+                    TINH_TRANG = "DA_DUYET",
                     ID_PB_DK = 0,
                     ID_NV_DK = 0,
                     HNTH = 0,
@@ -110,16 +191,34 @@ namespace OfficeSoftware
                 string calendarRequestJson = JsonConvert.SerializeObject(calendarRequest);
                 string CalendarResultString = client.UploadString("https://gwdoffice.pecc4.vn/v1/lichtuan/LichTuan/SelectLichTuan", "POST", calendarRequestJson);
                 CalendarDetailInfo CalendarObj = JsonConvert.DeserializeObject<CalendarDetailInfo>(CalendarResultString);
-
-                if(CalendarObj != null)
+                List<ProcessedCalendarData> calendarProcessedData = new List<ProcessedCalendarData>();
+                    
+                if (CalendarObj.Data != null)
                 {
-                    if(CalendarObj.Message == "200")
+                    if (CalendarObj.Message == "200")
                     {
                         if (CalendarObj.Data.Count > 0)
                         {
-                            foreach (var calendarItem in CalendarObj.Data)
+                            foreach(var calendarRawItem in CalendarObj.Data)
                             {
-                                DateTime startTime = DateTime.ParseExact(calendarItem.THOI_GIAN_BD, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime();
+                                calendarProcessedData.Add(new ProcessedCalendarData {
+                                    NOI_DUNG = calendarRawItem.NOI_DUNG,
+                                    THOI_GIAN_BD = DateTime.ParseExact(calendarRawItem.THOI_GIAN_BD, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                    THOI_GIAN_KT = DateTime.ParseExact(calendarRawItem.THOI_GIAN_KT, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                    NGAY_HOP = DateTime.ParseExact(calendarRawItem.NGAY_HOP, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                    CHU_TRI = calendarRawItem.CHU_TRI,
+                                    CHUAN_BI = calendarRawItem.CHUAN_BI,
+                                    THANH_PHAN = calendarRawItem.THANH_PHAN,
+                                    ID_PHONG_HOP = calendarRawItem.ID_PHONG_HOP,
+                                    PHONG_HOP = calendarRawItem.PHONG_HOP
+                                });
+                            }
+
+                            calendarProcessedData = calendarProcessedData.OrderBy(x => x.NGAY_HOP).ToList();
+
+                            foreach (var calendarItem in calendarProcessedData)
+                            {
+                                DateTime startTime = calendarItem.THOI_GIAN_BD;
                                 var meetingDay = ((DayDetail)((int)startTime.DayOfWeek)).GetEnumDescription();
                                 meetingDay += $" ({startTime.Day}/{startTime.Month})";
                                 string minuteMeeting = startTime.Minute < 10 ? "0" + startTime.Minute.ToString() : startTime.Minute.ToString();
@@ -128,20 +227,23 @@ namespace OfficeSoftware
                                 string meetingHost = calendarItem.CHU_TRI;
                                 string meetingParticipant = "";
 
-                                foreach (var prepareItem in calendarItem.CHUAN_BI)
-                                {
-                                    meetingPrepare += prepareItem.TEN + "\r\n";
-                                }
+                                //foreach (var prepareItem in calendarItem.CHUAN_BI)
+                                //{
+                                //    meetingPrepare += prepareItem.TEN + "\r\n";
+                                //}
+
+                                meetingPrepare = calendarItem.PHONG_HOP;
 
                                 foreach (var participantItem in calendarItem.THANH_PHAN)
                                 {
                                     meetingParticipant += participantItem.TEN + "\r\n";
                                 }
 
-                                CalendarRawList.Add(new MeetingCalendar {
+                                CalendarRawList.Add(new MeetingCalendar
+                                {
                                     Date = meetingDay,
                                     Time = meetingTime,
-                                    Room = calendarItem.ID_PHONG_HOP.TEN_PHONG,
+                                    Room = calendarItem.PHONG_HOP,
                                     Content = calendarItem.NOI_DUNG,
                                     Prepare = meetingPrepare,
                                     Host = meetingHost,
@@ -149,13 +251,13 @@ namespace OfficeSoftware
                                 });
                             }
                         }
-                    }    
-                }    
+                    }
+                }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Vui lòng kiểm tra kết nối VPN trước khi chạy phần mềm","Lỗi khởi tạo", MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng kiểm tra kết nối VPN trước khi chạy phần mềm", "Lỗi khởi tạo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
 
@@ -164,10 +266,11 @@ namespace OfficeSoftware
             #region DTGV data
             FileInfo existingFile = new FileInfo(Directory.GetCurrentDirectory() + "\\" + "Lichtuan_autoUpdateFromWebData.xlsx");
 
-            CalendarDTGV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            this.CalendarDTGV.RowsDefaultCellStyle.BackColor = Color.FromArgb(228, 251, 255);
+            CalendarDTGV.Invoke((MethodInvoker)(() => CalendarDTGV.DefaultCellStyle.WrapMode = DataGridViewTriState.True));
+            CalendarDTGV.Invoke((MethodInvoker)(() => this.CalendarDTGV.RowsDefaultCellStyle.BackColor = Color.FromArgb(228, 251, 255)));
+            CalendarDTGV.Invoke((MethodInvoker)(() => CalendarDTGV.RowHeadersVisible = false));
             //this.CalendarDTGV.AlternatingRowsDefaultCellStyle.BackColor = Color.Linen;
-            CalendarDTGV.RowHeadersVisible = false;
+            
 
             var dataTbl = new DataTable();
             DataTable DataTableShow = new DataTable();
@@ -290,8 +393,7 @@ namespace OfficeSoftware
             {
                 dataTbl.AcceptChanges();
                 DataTableShow = dataTbl;
-
-                CalendarDTGV.DataSource = DataTableShow;
+                CalendarDTGV.Invoke((MethodInvoker)(() => CalendarDTGV.DataSource = DataTableShow));
             }
             else
             {
@@ -300,7 +402,7 @@ namespace OfficeSoftware
                 dr[3] = "Không có lịch từ hôm nay đến hết tuần";
                 DataTableShow.Rows.Add(dr);
                 DataTableShow.AcceptChanges();
-                CalendarDTGV.DataSource = DataTableShow;
+                CalendarDTGV.Invoke((MethodInvoker)(() => CalendarDTGV.DataSource = DataTableShow));
             }
 
             #region DTGV table setup
@@ -315,90 +417,17 @@ namespace OfficeSoftware
             DataGridViewColumn calendarColumnHost = CalendarDTGV.Columns[5];
             DataGridViewColumn calendarColumnParticipant = CalendarDTGV.Columns[6];
 
-            calendarColumnDate.Width = 36;
-            calendarColumnTime.Width = 28;
-            calendarColumnRoom.Width = 48;
-            calendarColumnContent.Width = 235;
-            calendarColumnPrepare.Width = 40;
-            calendarColumnHost.Width = 48;
-            calendarColumnParticipant.Width = 195;
+            
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnDate.Width = 36));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnTime.Width = 28));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnRoom.Width = 48));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnContent.Width = 170));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnPrepare.Width = 65));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnHost.Width = 48));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnParticipant.Width = 195));
 
 
             #endregion
-
-        }
-        
-
-        private void CalendarDTGV_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            CalendarDTGV.ClearSelection();
-            DTGVRow = CalendarDTGV.Rows.Count;
-            ScrollOffset = DTGVRow / 3;
-            CalendarDTGV.FirstDisplayedScrollingRowIndex = 0;
-            ScrollTimer.Enabled = true;
-        }
-
-        private void CalendarDTGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void CalendarDTGV_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void ScrollTimer_Tick(object sender, EventArgs e)
-        {
-            ScrollTimer.Enabled = false;
-            DTGVShowTurn++;
-            if (DTGVShowTurn == 3)
-            {
-                DTGVShowTurn = 0;
-                CalendarDTGV.FirstDisplayedScrollingRowIndex = 0;
-            }
-            else
-                CalendarDTGV.FirstDisplayedScrollingRowIndex += ScrollOffset;
-            ScrollTimer.Enabled = true;
-        }
-
-       
-
-        private void CalendarDTGV_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            e.AdvancedBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
-            if (e.RowIndex < 1 || e.ColumnIndex < 0)
-                return;
-            if (IsTheSameCellValue(e.ColumnIndex, e.RowIndex))
-            {
-                e.AdvancedBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
-            }
-            else
-            {
-                e.AdvancedBorderStyle.Top = CalendarDTGV.AdvancedCellBorderStyle.Top;
-            }
-        }
-
-        private void CalendarDTGV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (e.RowIndex == 0)
-                return;
-            if (IsTheSameCellValue(e.ColumnIndex, e.RowIndex))
-            {
-                e.Value = "";
-                e.FormattingApplied = true;
-            }
-        }
-
-        bool IsTheSameCellValue(int column, int row)
-        {
-            DataGridViewCell cell1 = CalendarDTGV[column, row];
-            DataGridViewCell cell2 = CalendarDTGV[column, row - 1];
-            if (cell1.Value == null || cell2.Value == null)
-            {
-                return false;
-            }
-            return cell1.Value.ToString() == cell2.Value.ToString();
         }
 
     }
