@@ -35,6 +35,30 @@ namespace OfficeSoftware
                 ViengTimeText.Text = BadnewsSheet.Cells[1, 5].Value.ToString().Trim();
                 DiTimeText.Text = BadnewsSheet.Cells[1, 6].Value.ToString().Trim();
                 PositionText.Text = BadnewsSheet.Cells[1, 7].Value.ToString().Trim();
+                PositionText.Visible = true;
+
+                if (string.IsNullOrEmpty(PositionText.Text))
+                {
+                    PositionText.Visible = false;
+                    label5.Location = new System.Drawing.Point(43, 348 - 46);
+                    RelateText.Location = new System.Drawing.Point(92, 348 - 46);
+                    MatTimeText.Location = new System.Drawing.Point(43, 446 - 46);
+                    label7.Location = new System.Drawing.Point(49, 538 - 46);
+                    ViengTimeText.Location = new System.Drawing.Point(109, 526 - 46);
+                    label9.Location = new System.Drawing.Point(49, 669 - 46);
+                    DiTimeText.Location = new System.Drawing.Point(109, 652 - 46);
+                }   
+                else
+                {
+                    label5.Location = new System.Drawing.Point(43, 348);
+                    RelateText.Location = new System.Drawing.Point(92, 348);
+                    MatTimeText.Location = new System.Drawing.Point(43, 446);
+                    label7.Location = new System.Drawing.Point(49, 538);
+                    ViengTimeText.Location = new System.Drawing.Point(109, 526);
+                    label9.Location = new System.Drawing.Point(49, 669);
+                    DiTimeText.Location = new System.Drawing.Point(109, 652);
+                }    
+                
                 package.Dispose();
             }
         

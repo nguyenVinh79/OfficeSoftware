@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OfficeSoftware.Model
 {
-    class Calendar
+    class MeetingCalendar
     {
         public string Date { get; set; }
         public string Time { get; set; }

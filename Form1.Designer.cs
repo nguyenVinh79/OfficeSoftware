@@ -44,6 +44,8 @@
             this.WindowCloseBtn = new System.Windows.Forms.Button();
             this.ShowBtn = new System.Windows.Forms.Button();
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.BirthdayTimer = new System.Windows.Forms.Timer(this.components);
             this.BDshowTimer = new System.Windows.Forms.Timer(this.components);
             this.saveExcelTimer = new System.Windows.Forms.Timer(this.components);
@@ -51,6 +53,9 @@
             this.AutoHideTimer = new System.Windows.Forms.Timer(this.components);
             this.TaskbarPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.MainPanel.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.SuspendLayout();
             // 
             // TaskbarPanel
@@ -80,17 +85,17 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(5, 2);
+            this.pictureBox1.Location = new System.Drawing.Point(7, 5);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(138, 48);
+            this.pictureBox1.Size = new System.Drawing.Size(158, 42);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // SettingButton
             // 
-            this.SettingButton.BackColor = System.Drawing.Color.Navy;
-            this.SettingButton.BackgroundColor = System.Drawing.Color.Navy;
+            this.SettingButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.SettingButton.BackgroundColor = System.Drawing.SystemColors.Highlight;
             this.SettingButton.BorderColor = System.Drawing.Color.LavenderBlush;
             this.SettingButton.BorderRadius = 20;
             this.SettingButton.BorderSize = 0;
@@ -98,7 +103,7 @@
             this.SettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SettingButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SettingButton.ForeColor = System.Drawing.Color.White;
-            this.SettingButton.Location = new System.Drawing.Point(957, 4);
+            this.SettingButton.Location = new System.Drawing.Point(1045, 4);
             this.SettingButton.Name = "SettingButton";
             this.SettingButton.Size = new System.Drawing.Size(116, 42);
             this.SettingButton.TabIndex = 0;
@@ -109,8 +114,8 @@
             // 
             // ImageSettingButton
             // 
-            this.ImageSettingButton.BackColor = System.Drawing.Color.Navy;
-            this.ImageSettingButton.BackgroundColor = System.Drawing.Color.Navy;
+            this.ImageSettingButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.ImageSettingButton.BackgroundColor = System.Drawing.SystemColors.Highlight;
             this.ImageSettingButton.BorderColor = System.Drawing.Color.LavenderBlush;
             this.ImageSettingButton.BorderRadius = 20;
             this.ImageSettingButton.BorderSize = 0;
@@ -118,7 +123,7 @@
             this.ImageSettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ImageSettingButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ImageSettingButton.ForeColor = System.Drawing.Color.White;
-            this.ImageSettingButton.Location = new System.Drawing.Point(833, 4);
+            this.ImageSettingButton.Location = new System.Drawing.Point(913, 4);
             this.ImageSettingButton.Name = "ImageSettingButton";
             this.ImageSettingButton.Size = new System.Drawing.Size(116, 42);
             this.ImageSettingButton.TabIndex = 0;
@@ -129,8 +134,8 @@
             // 
             // ImageSlideButton
             // 
-            this.ImageSlideButton.BackColor = System.Drawing.Color.Navy;
-            this.ImageSlideButton.BackgroundColor = System.Drawing.Color.Navy;
+            this.ImageSlideButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.ImageSlideButton.BackgroundColor = System.Drawing.SystemColors.Highlight;
             this.ImageSlideButton.BorderColor = System.Drawing.Color.LavenderBlush;
             this.ImageSlideButton.BorderRadius = 20;
             this.ImageSlideButton.BorderSize = 0;
@@ -138,7 +143,7 @@
             this.ImageSlideButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ImageSlideButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ImageSlideButton.ForeColor = System.Drawing.Color.White;
-            this.ImageSlideButton.Location = new System.Drawing.Point(718, 4);
+            this.ImageSlideButton.Location = new System.Drawing.Point(790, 4);
             this.ImageSlideButton.Name = "ImageSlideButton";
             this.ImageSlideButton.Size = new System.Drawing.Size(107, 42);
             this.ImageSlideButton.TabIndex = 0;
@@ -149,8 +154,8 @@
             // 
             // EventButton
             // 
-            this.EventButton.BackColor = System.Drawing.Color.Navy;
-            this.EventButton.BackgroundColor = System.Drawing.Color.Navy;
+            this.EventButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.EventButton.BackgroundColor = System.Drawing.SystemColors.Highlight;
             this.EventButton.BorderColor = System.Drawing.Color.LavenderBlush;
             this.EventButton.BorderRadius = 20;
             this.EventButton.BorderSize = 0;
@@ -158,7 +163,7 @@
             this.EventButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EventButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.EventButton.ForeColor = System.Drawing.Color.White;
-            this.EventButton.Location = new System.Drawing.Point(603, 4);
+            this.EventButton.Location = new System.Drawing.Point(667, 4);
             this.EventButton.Name = "EventButton";
             this.EventButton.Size = new System.Drawing.Size(107, 42);
             this.EventButton.TabIndex = 0;
@@ -169,8 +174,8 @@
             // 
             // badNewsButton
             // 
-            this.badNewsButton.BackColor = System.Drawing.Color.Navy;
-            this.badNewsButton.BackgroundColor = System.Drawing.Color.Navy;
+            this.badNewsButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.badNewsButton.BackgroundColor = System.Drawing.SystemColors.Highlight;
             this.badNewsButton.BorderColor = System.Drawing.Color.LavenderBlush;
             this.badNewsButton.BorderRadius = 20;
             this.badNewsButton.BorderSize = 0;
@@ -178,7 +183,7 @@
             this.badNewsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.badNewsButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.badNewsButton.ForeColor = System.Drawing.Color.White;
-            this.badNewsButton.Location = new System.Drawing.Point(488, 4);
+            this.badNewsButton.Location = new System.Drawing.Point(544, 4);
             this.badNewsButton.Name = "badNewsButton";
             this.badNewsButton.Size = new System.Drawing.Size(107, 42);
             this.badNewsButton.TabIndex = 0;
@@ -189,8 +194,8 @@
             // 
             // birthdayButton
             // 
-            this.birthdayButton.BackColor = System.Drawing.Color.Navy;
-            this.birthdayButton.BackgroundColor = System.Drawing.Color.Navy;
+            this.birthdayButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.birthdayButton.BackgroundColor = System.Drawing.SystemColors.Highlight;
             this.birthdayButton.BorderColor = System.Drawing.Color.LavenderBlush;
             this.birthdayButton.BorderRadius = 20;
             this.birthdayButton.BorderSize = 0;
@@ -198,7 +203,7 @@
             this.birthdayButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.birthdayButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.birthdayButton.ForeColor = System.Drawing.Color.White;
-            this.birthdayButton.Location = new System.Drawing.Point(373, 4);
+            this.birthdayButton.Location = new System.Drawing.Point(421, 4);
             this.birthdayButton.Name = "birthdayButton";
             this.birthdayButton.Size = new System.Drawing.Size(107, 42);
             this.birthdayButton.TabIndex = 0;
@@ -209,8 +214,8 @@
             // 
             // CalendarButton
             // 
-            this.CalendarButton.BackColor = System.Drawing.Color.Navy;
-            this.CalendarButton.BackgroundColor = System.Drawing.Color.Navy;
+            this.CalendarButton.BackColor = System.Drawing.SystemColors.Highlight;
+            this.CalendarButton.BackgroundColor = System.Drawing.SystemColors.Highlight;
             this.CalendarButton.BorderColor = System.Drawing.Color.LavenderBlush;
             this.CalendarButton.BorderRadius = 20;
             this.CalendarButton.BorderSize = 0;
@@ -218,7 +223,7 @@
             this.CalendarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CalendarButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CalendarButton.ForeColor = System.Drawing.Color.White;
-            this.CalendarButton.Location = new System.Drawing.Point(258, 4);
+            this.CalendarButton.Location = new System.Drawing.Point(298, 4);
             this.CalendarButton.Name = "CalendarButton";
             this.CalendarButton.Size = new System.Drawing.Size(107, 42);
             this.CalendarButton.TabIndex = 0;
@@ -273,7 +278,7 @@
             // 
             this.ShowBtn.BackColor = System.Drawing.Color.Lime;
             this.ShowBtn.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ShowBtn.Location = new System.Drawing.Point(1081, 4);
+            this.ShowBtn.Location = new System.Drawing.Point(1177, 4);
             this.ShowBtn.Name = "ShowBtn";
             this.ShowBtn.Size = new System.Drawing.Size(123, 42);
             this.ShowBtn.TabIndex = 5;
@@ -283,6 +288,7 @@
             // 
             // MainPanel
             // 
+            this.MainPanel.Controls.Add(this.panel1);
             this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainPanel.Location = new System.Drawing.Point(0, 0);
             this.MainPanel.Name = "MainPanel";
@@ -290,6 +296,28 @@
             this.MainPanel.TabIndex = 3;
             this.MainPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.MainPanel_Paint);
             this.MainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPanel_MouseMove);
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.webView21);
+            this.panel1.Location = new System.Drawing.Point(0, 927);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1522, 71);
+            this.panel1.TabIndex = 3;
+            // 
+            // webView21
+            // 
+            this.webView21.CreationProperties = null;
+            this.webView21.DefaultBackgroundColor = System.Drawing.Color.White;
+            this.webView21.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.webView21.Location = new System.Drawing.Point(0, 0);
+            this.webView21.Name = "webView21";
+            this.webView21.Size = new System.Drawing.Size(1522, 71);
+            this.webView21.TabIndex = 2;
+            this.webView21.ZoomFactor = 1D;
             // 
             // BirthdayTimer
             // 
@@ -329,6 +357,9 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.TaskbarPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.MainPanel.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -354,6 +385,8 @@
         private CustomButtom ImageSettingButton;
         private CustomButtom SettingButton;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

@@ -84,7 +84,8 @@ namespace OfficeSoftware
                     Name = BirthdaySheet.Cells[row, 1].Value.ToString().Trim(),
                     Date = BirthdaySheet.Cells[row, 2].Value.ToString().Trim(),
                     Department= BirthdaySheet.Cells[row, 4].Value == null ? string.Empty : BirthdaySheet.Cells[row, 4].Value.ToString().Trim(),
-                    Position = BirthdaySheet.Cells[row, 3].Value == null ? string.Empty : BirthdaySheet.Cells[row, 3].Value.ToString().Trim()
+                    Position = BirthdaySheet.Cells[row, 3].Value == null ? string.Empty : BirthdaySheet.Cells[row, 3].Value.ToString().Trim(),
+                    Gender = BirthdaySheet.Cells[row, 5].Value == null ? string.Empty : BirthdaySheet.Cells[row, 5].Value.ToString().Trim()
                     });
                 }
 
@@ -108,7 +109,8 @@ namespace OfficeSoftware
                                 Name = item.Name,
                                 Date = item.Date,
                                 Department = item.Department,
-                                Position = item.Position
+                                Position = item.Position,
+                                Gender = item.Gender
                             });
                         }
 
@@ -119,7 +121,8 @@ namespace OfficeSoftware
                                 Name = item.Name,
                                 Date = item.Date,
                                 Department = item.Department,
-                                Position = item.Position
+                                Position = item.Position,
+                                Gender = item.Gender
                             });
                         }
                     }
@@ -159,7 +162,8 @@ namespace OfficeSoftware
                             Name = item.Name,
                             Date = item.Date,
                             Department = item.Department,
-                            Position = item.Position
+                            Position = item.Position,
+                            Gender = item.Gender
                         });
                     }
 
@@ -167,9 +171,15 @@ namespace OfficeSoftware
 
                 if (birthdayShowList.Count>0)
                 {
-                    NameLabel.Text = birthdayShowList[0].Name;
-                    DepartmentLable.Text = birthdayShowList[0].Department;
-                    PositionLabel.Text = birthdayShowList[0].Position;
+                    if (birthdayShowList[0].Gender.Trim().ToLower() == "nam" || string.IsNullOrEmpty(birthdayShowList[0].Gender))
+                    {
+                        NameLabel.Text = "ÔNG " + birthdayShowList[0].Name.ToUpper();
+                    }
+                    else
+                        NameLabel.Text = "BÀ " + birthdayShowList[0].Name.ToUpper();
+
+                    DepartmentLable.Text = birthdayShowList[0].Department.ToUpper();
+                    PositionLabel.Text = birthdayShowList[0].Position.ToUpper();
                 }
                 package.Dispose();
             }
@@ -210,29 +220,29 @@ namespace OfficeSoftware
             #region Configure component location
             if (!String.IsNullOrEmpty(DepartmentLable.Text.Trim()))
             {
-                label1.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - label1.Width) / 2, this.Parent.Height / 8);
-                NameLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - NameLabel.Width) / 2, this.Parent.Height / 4);
-                PositionLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - PositionLabel.Width) / 2, this.Parent.Height / 3 + 20);
-                DepartmentLable.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - DepartmentLable.Width) / 2, this.Parent.Height / 2 - this.Parent.Height / 16 + 40);
-                label2.Location = new System.Drawing.Point(0, this.Parent.Height / 2 + this.Parent.Height/16 + 50);
-                dayNow.Location = new System.Drawing.Point(label2.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                label3.Location = new System.Drawing.Point(label2.Width + dayNow.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                monthNow.Location = new System.Drawing.Point(label3.Location.X + label3.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                label4.Location = new System.Drawing.Point(monthNow.Location.X + monthNow.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                yearNow.Location = new System.Drawing.Point(label4.Location.X + label4.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
+                label1.Location = new System.Drawing.Point((1180 / 2 - label1.Width / 2 - 260), this.Parent.Height / 8 + 30);
+                NameLabel.Location = new System.Drawing.Point((1180 / 2 - 260 - NameLabel.Width / 2), this.Parent.Height / 4 + 30);
+                PositionLabel.Location = new System.Drawing.Point((1180 / 2 - 260 - PositionLabel.Width / 2), this.Parent.Height / 3 + 25 + 30);
+                DepartmentLable.Location = new System.Drawing.Point((1180 / 2 - 260 - DepartmentLable.Width / 2), this.Parent.Height / 2 - this.Parent.Height / 16 + 50 + 30);
+                label2.Location = new System.Drawing.Point(0, this.Parent.Height / 2 + this.Parent.Height / 16 +60); //+60
+                dayNow.Location = new System.Drawing.Point(label2.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+                label3.Location = new System.Drawing.Point(label2.Width + dayNow.Width - 15, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+                monthNow.Location = new System.Drawing.Point(label3.Location.X + label3.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+                label4.Location = new System.Drawing.Point(monthNow.Location.X + monthNow.Width - 15, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+                yearNow.Location = new System.Drawing.Point(label4.Location.X + label4.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
             }
             else 
             {
-                label1.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - label1.Width) / 2, this.Parent.Height / 8);
-                NameLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - NameLabel.Width) / 2, this.Parent.Height / 4 +30);
-                PositionLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - PositionLabel.Width) / 2, this.Parent.Height / 3 + 50);
-                DepartmentLable.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - DepartmentLable.Width) / 2, this.Parent.Height / 2 - this.Parent.Height / 16 + 40);
-                label2.Location = new System.Drawing.Point(0, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                dayNow.Location = new System.Drawing.Point(label2.Width, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                label3.Location = new System.Drawing.Point(label2.Width + dayNow.Width, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                monthNow.Location = new System.Drawing.Point(label3.Location.X + label3.Width, this.Parent.Height / 2 - this.Parent.Height/16 + 100);
-                label4.Location = new System.Drawing.Point(monthNow.Location.X + monthNow.Width, this.Parent.Height / 2 - this.Parent.Height/16 + 100);
-                yearNow.Location = new System.Drawing.Point(label4.Location.X + label4.Width, this.Parent.Height / 2 - this.Parent.Height/16 + 100);
+                label1.Location = new System.Drawing.Point((1180 / 2 - label1.Width / 2 - 260), this.Parent.Height / 8);
+                NameLabel.Location = new System.Drawing.Point((1180 / 2 - 260 - NameLabel.Width / 2), this.Parent.Height / 4);
+                PositionLabel.Location = new System.Drawing.Point((1180 / 2 - 260 - PositionLabel.Width / 2), this.Parent.Height / 3 + 25);
+                DepartmentLable.Location = new System.Drawing.Point((1180 / 2 - 260 - DepartmentLable.Width / 2), this.Parent.Height / 2 - this.Parent.Height / 16 + 50);
+                label2.Location = new System.Drawing.Point(0, this.Parent.Height / 2 + this.Parent.Height / 16 - 20); //+60
+                dayNow.Location = new System.Drawing.Point(label2.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 - 20);
+                label3.Location = new System.Drawing.Point(label2.Width + dayNow.Width - 15, this.Parent.Height / 2 + this.Parent.Height / 16 - 20);
+                monthNow.Location = new System.Drawing.Point(label3.Location.X + label3.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 - 20);
+                label4.Location = new System.Drawing.Point(monthNow.Location.X + monthNow.Width - 15, this.Parent.Height / 2 + this.Parent.Height / 16 - 20);
+                yearNow.Location = new System.Drawing.Point(label4.Location.X + label4.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 - 20);
             }
 
             #endregion
@@ -277,35 +287,24 @@ namespace OfficeSoftware
                 currentEntity = 0;
             }
 
-            NameLabel.Text = birthdayShowList[currentEntity].Name;
-            DepartmentLable.Text = birthdayShowList[currentEntity].Department;
+            if (birthdayShowList[currentEntity].Gender.Trim().ToLower() == "nam" || string.IsNullOrEmpty(birthdayShowList[currentEntity].Gender))
+            {
+                NameLabel.Text = "ÔNG " + birthdayShowList[currentEntity].Name.ToUpper();
+            }
+            else
+                NameLabel.Text = "BÀ " + birthdayShowList[currentEntity].Name.ToUpper();
+
+            PositionLabel.Text = birthdayShowList[currentEntity].Position.ToUpper();
+            DepartmentLable.Text = birthdayShowList[currentEntity].Department.ToUpper();
 
             #region Configure component location
             if (!String.IsNullOrEmpty(DepartmentLable.Text.Trim()))
             {
-                label1.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - label1.Width) / 2, this.Parent.Height / 8);
-                NameLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - NameLabel.Width) / 2, this.Parent.Height / 4);
-                PositionLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - PositionLabel.Width) / 2, this.Parent.Height / 3 + 20);
-                DepartmentLable.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - DepartmentLable.Width) / 2, this.Parent.Height / 2 - this.Parent.Height / 16 + 40);
-                label2.Location = new System.Drawing.Point(0, this.Parent.Height/2 + this.Parent.Height/16 + 50);
-                dayNow.Location = new System.Drawing.Point(label2.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                label3.Location = new System.Drawing.Point(label2.Width + dayNow.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                monthNow.Location = new System.Drawing.Point(label3.Location.X + label3.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                label4.Location = new System.Drawing.Point(monthNow.Location.X + monthNow.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
-                yearNow.Location = new System.Drawing.Point(label4.Location.X + label4.Width, this.Parent.Height / 2 + this.Parent.Height / 16 + 50);
+
             }
             else
             {
-                label1.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - label1.Width) / 2, this.Parent.Height / 8);
-                NameLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - NameLabel.Width) / 2, this.Parent.Height / 4 + 30);
-                PositionLabel.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - PositionLabel.Width) / 2, this.Parent.Height / 3 + 50);
-                DepartmentLable.Location = new System.Drawing.Point(((this.Parent.Width) / 2 - 300 - DepartmentLable.Width) / 2, this.Parent.Height / 2 - this.Parent.Height / 16 + 50);
-                label2.Location = new System.Drawing.Point(0, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                dayNow.Location = new System.Drawing.Point(label2.Width, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                label3.Location = new System.Drawing.Point(label2.Width + dayNow.Width, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                monthNow.Location = new System.Drawing.Point(label3.Location.X + label3.Width, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                label4.Location = new System.Drawing.Point(monthNow.Location.X + monthNow.Width, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
-                yearNow.Location = new System.Drawing.Point(label4.Location.X + label4.Width, this.Parent.Height / 2 - this.Parent.Height / 16 + 100);
+
             }
 
             #endregion
@@ -320,5 +319,15 @@ namespace OfficeSoftware
             ImgSlideEnTimer.Enabled = false;
             ImageSlider.Visible = true;
         }
+        //label1.Location = new System.Drawing.Point((1180 / 2 - label1.Width / 2 - 260), this.Parent.Height / 8);
+        //        NameLabel.Location = new System.Drawing.Point((1180 / 2 - 260 - NameLabel.Width / 2), this.Parent.Height / 4);
+        //        PositionLabel.Location = new System.Drawing.Point((1180 / 2 - 260 - PositionLabel.Width / 2), this.Parent.Height / 3 + 25);
+        //        DepartmentLable.Location = new System.Drawing.Point((1180 / 2 - 260 - DepartmentLable.Width / 2), this.Parent.Height / 2 - this.Parent.Height / 16 + 50);
+        //        label2.Location = new System.Drawing.Point(0, this.Parent.Height / 2 + this.Parent.Height / 16 + 60); //+60
+        //        dayNow.Location = new System.Drawing.Point(label2.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+        //        label3.Location = new System.Drawing.Point(label2.Width + dayNow.Width - 15, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+        //        monthNow.Location = new System.Drawing.Point(label3.Location.X + label3.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+        //        label4.Location = new System.Drawing.Point(monthNow.Location.X + monthNow.Width - 15, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
+        //        yearNow.Location = new System.Drawing.Point(label4.Location.X + label4.Width - 12, this.Parent.Height / 2 + this.Parent.Height / 16 + 60);
     }
 }

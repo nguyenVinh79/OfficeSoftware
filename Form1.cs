@@ -16,11 +16,15 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using OfficeSoftware.Model;
 using System.Globalization;
+using HtmlAgilityPack;
+using System.Net;
+using System.Data.SqlClient;
 
 namespace OfficeSoftware
 {
     public partial class Form1 : Form
     {
+        string birthdayString;
         private Form currentChildForm;
         WebBrowser wb;
         public BirthdayForm bdform = new BirthdayForm();
@@ -34,6 +38,10 @@ namespace OfficeSoftware
         protected bool isBadnewsShow;
         protected bool isEventShow;
         protected bool isImageSlideShow;
+        string connectString = @"server=TVD4SRVR04\SQLSERVER2K8R2;multipleactiveresultsets=true;database=Pecc4Web;user id=sa;password=abc@123";
+
+        //@"Data Source=TVD4SRVR04\SQLSERVER2K8R2;multipleactiveresultsets=true;Initial Catalog=Pecc4Web;User ID=sa;Password=abc@123;Integrated Security=true";
+        List<BirthdayEntity> EmployeeBirthdayList = new List<BirthdayEntity>();
 
         FileInfo existingFile = new FileInfo(Directory.GetCurrentDirectory() + "\\" + "Lichtuan_autoUpdateFromWebData.xlsx");
 
@@ -43,9 +51,33 @@ namespace OfficeSoftware
             WindowState = FormWindowState.Maximized;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
+            try
+            {
+                var connection = new SqlConnection(connectString);
+                var sql = "SELECT EmployeeName, Department, CONVERT(VARCHAR(10),dbo.Employee.BirthDay ,103) AS Birthday FROM dbo.Employee";
 
+                SqlDataAdapter employeeData = new SqlDataAdapter(sql, connection);
+                var dtEmployee = new DataTable();
+
+                employeeData.Fill(dtEmployee);
+
+                foreach (DataRow dataRow in dtEmployee.Rows)
+                {
+                    EmployeeBirthdayList.Add(new BirthdayEntity
+                    {
+                        Name = $"{ dataRow["EmployeeName"]}",
+                        Department = $"{dataRow["Department"] }",
+                        Date = $"{dataRow["Birthday"]}"
+
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi : Không thể truy cập database công ty " +"\r\n Chi tiết lỗi:" + ex.Message.ToString(), "Thông báo", MessageBoxButtons.OK);
+            }
             AutoHideTimer.Enabled = true;
             ShowBtn.Text = "Dừng";
             ShowBtn.BackColor = Color.Red;
@@ -98,6 +130,59 @@ namespace OfficeSoftware
                 SlideTimer.Enabled = true;
             }
 
+            var html = new HtmlWeb();
+            //var birthdayMarquee = html.Load("http://10.67.0.4/pecc4/GUI/Pages/Article.aspx");
+            //var birthdayHTML = birthdayMarquee.DocumentNode.SelectSingleNode("//marquee");
+            //var birthdayRaw = birthdayHTML.Descendants("font")
+            //            .Select(td => WebUtility.HtmlDecode(td.InnerText.Trim()))
+            //            .ToList();
+
+            //birthdayString = "CHÚC MỪNG SINH NHẬT:&nbsp&nbsp&nbsp&#127873&nbsp&nbsp&nbsp";
+            //birthdayString += "Lê Dũng-ĐKS(1/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+            //birthdayString += "Hoàng Quốc Khải-P3(1/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+            //birthdayString += "Trần Trương Hân-P6(1/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+            //birthdayString += "Trần Thanh Trường-VP(2/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+
+            var BirthdayInMonthList = EmployeeBirthdayList.Where(x => (Convert.ToDateTime(x.Date).Month == DateTime.Now.Month) &&
+                (Convert.ToDateTime(x.Date).Day >= DateTime.Now.Day)).ToList();
+
+            foreach (var item in BirthdayInMonthList)
+            {
+                
+
+                birthdayString += item.Name+"-"+item.Department + " ("+ item.Date.Substring(0,5) +")";
+                birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
+            }
+
+            try
+            {
+                #region Webview configurations
+                //to top right, #ffff66 12%, #00ff99 99%
+                var htmlRaw = @"<html> <head>
+                <title>Basic Web Page</title>
+                <style>
+                body {
+                height: 46px;
+                overflow: hidden;
+                background: linear-gradient(to top right, #ffffff 12%, #33ccff 76%)
+                </style>
+                </head> 
+                <body>
+                      <marquee width='100%' direction='left' height='200px' loop='' bgcolor='' style='padding-top: 10px;'>
+                <font face = 'Verdana' size = '4'>" + birthdayString + "</font></marquee></body> </html>";
+
+                await webView21.EnsureCoreWebView2Async();
+                webView21.NavigateToString(htmlRaw);
+
+                /* panel1.BringToFront();*/
+                
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi :" + ex.Message.ToString(), "Thông báo", MessageBoxButtons.OK);
+            }
+            
         }
 
         private void BirthdayTimer_Tick(object sender, EventArgs e)
@@ -165,6 +250,13 @@ namespace OfficeSoftware
             MainPanel.Tag = childForm;
             childForm.BringToFront();
             childForm.Show();
+
+            if (childForm.Name == "BadNews" || childForm.Name == "ImageGallery" || childForm.Name == "Setting")
+            {
+
+            }
+            else
+                panel1.BringToFront();
         }
         private void OpenAnnounceForm(Form childForm)
         {
