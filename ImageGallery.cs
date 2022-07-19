@@ -19,7 +19,6 @@ namespace OfficeSoftware
 
         private void AddImage_Click(object sender, EventArgs e)
         {
-
             OpenFileDialog openDialog = new OpenFileDialog();
             openDialog.Title = "Chọn các hình cần trình chiếu";
             openDialog.Multiselect = true;

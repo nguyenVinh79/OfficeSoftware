@@ -41,6 +41,8 @@
             this.ViengTimeText = new System.Windows.Forms.Label();
             this.DiTimeText = new System.Windows.Forms.Label();
             this.PositionText = new System.Windows.Forms.Label();
+            this.ImageBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).BeginInit();
             this.SuspendLayout();
             // 
             // TitleLable
@@ -184,12 +186,23 @@
             this.PositionText.TabIndex = 3;
             this.PositionText.Text = "Nguyên là";
             // 
+            // ImageBox
+            // 
+            this.ImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ImageBox.Location = new System.Drawing.Point(0, 0);
+            this.ImageBox.Name = "ImageBox";
+            this.ImageBox.Size = new System.Drawing.Size(1372, 966);
+            this.ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ImageBox.TabIndex = 4;
+            this.ImageBox.TabStop = false;
+            // 
             // BadNews
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1372, 966);
+            this.Controls.Add(this.ImageBox);
             this.Controls.Add(this.PositionText);
             this.Controls.Add(this.DiTimeText);
             this.Controls.Add(this.ViengTimeText);
@@ -207,6 +220,7 @@
             this.Text = "CÔNG TY CP TƯ VẤN XÂY DỰNG ĐIỆN 4 BÁO TIN";
             this.Load += new System.EventHandler(this.BadNews_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.BadNews_Paint);
+            ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -226,5 +240,6 @@
         private System.Windows.Forms.Label ViengTimeText;
         private System.Windows.Forms.Label DiTimeText;
         private System.Windows.Forms.Label PositionText;
+        private System.Windows.Forms.PictureBox ImageBox;
     }
 }

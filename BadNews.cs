@@ -36,6 +36,7 @@ namespace OfficeSoftware
                 DiTimeText.Text = BadnewsSheet.Cells[1, 6].Value.ToString().Trim();
                 PositionText.Text = BadnewsSheet.Cells[1, 7].Value.ToString().Trim();
                 PositionText.Visible = true;
+                var ImageShowCheck = BadnewsSheet.Cells[1, 8].Value.ToString().Trim().ToLower();
 
                 if (string.IsNullOrEmpty(PositionText.Text))
                 {
@@ -57,6 +58,23 @@ namespace OfficeSoftware
                     ViengTimeText.Location = new System.Drawing.Point(109, 526);
                     label9.Location = new System.Drawing.Point(49, 669);
                     DiTimeText.Location = new System.Drawing.Point(109, 652);
+                }    
+
+                if(ImageShowCheck =="true")
+                {
+                    ImageBox.BringToFront();
+                    var currentImagePath = Directory.GetCurrentDirectory() + "\\BadNewsImage\\";
+                    string[] currentImages = Directory.GetFiles(currentImagePath);
+
+                    if (currentImages.Length >= 1)
+                    {
+                        Image tempImage = Image.FromFile(currentImages[0]);
+                        ImageBox.Image = tempImage;
+                    }
+                }
+                else
+                {
+                    ImageBox.Visible = false;
                 }    
                 
                 package.Dispose();

@@ -148,6 +148,7 @@ namespace OfficeSoftware
                 BadNewsSheet.Cells[excelRow, 5].Value = string.IsNullOrEmpty(BadVisit.Text) ? "" : BadVisit.Text;
                 BadNewsSheet.Cells[excelRow, 6].Value = string.IsNullOrEmpty(BadBury.Text) ? "" : BadBury.Text;
                 BadNewsSheet.Cells[excelRow, 7].Value = string.IsNullOrEmpty(PositionTb.Text) ? "" : PositionTb.Text;
+                BadNewsSheet.Cells[excelRow, 8].Value = ImageBadNewsCheck.Checked == true ? "true" : "false";
 
                 package.Save();
                 package.Dispose();
@@ -157,135 +158,159 @@ namespace OfficeSoftware
 
         private void Setting_Load(object sender, EventArgs e)
         {
-
-            int excelRow = 1;
-
-            using (ExcelPackage package = new ExcelPackage(sourceFile))
+            try
             {
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                //get the first worksheet in the workbook
+                int excelRow = 1;
 
-                ExcelWorksheet BadNewsSheet = package.Workbook.Worksheets[3];
+                using (ExcelPackage package = new ExcelPackage(sourceFile))
+                {
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    //get the first worksheet in the workbook
 
-                BadName.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 1].Value.ToString().Trim()) ? "" : BadNewsSheet.Cells[excelRow, 1].Value.ToString().Trim();
-                BadYear.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 2].Value.ToString().Trim()) ? "" : BadNewsSheet.Cells[excelRow, 2].Value.ToString().Trim(); ;
-                BadPosition.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 3].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 3].Value.ToString().Trim(); ;
-                BadTime.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 4].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 4].Value.ToString().Trim(); ;
-                BadVisit.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 5].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 5].Value.ToString().Trim(); ;
-                BadBury.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 6].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 6].Value.ToString().Trim(); ;
-                PositionTb.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 7].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 7].Value.ToString().Trim(); ;
+                    ExcelWorksheet BadNewsSheet = package.Workbook.Worksheets[3];
 
-                package.Dispose();
+                    BadName.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 1].Value.ToString().Trim()) ? "" : BadNewsSheet.Cells[excelRow, 1].Value.ToString().Trim();
+                    BadYear.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 2].Value.ToString().Trim()) ? "" : BadNewsSheet.Cells[excelRow, 2].Value.ToString().Trim(); ;
+                    BadPosition.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 3].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 3].Value.ToString().Trim(); ;
+                    BadTime.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 4].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 4].Value.ToString().Trim(); ;
+                    BadVisit.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 5].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 5].Value.ToString().Trim(); ;
+                    BadBury.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 6].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 6].Value.ToString().Trim(); ;
+                    PositionTb.Text = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 7].Value.ToString().Trim()) ? " " : BadNewsSheet.Cells[excelRow, 7].Value.ToString().Trim(); ;
+                    var ImageShowCheck = string.IsNullOrEmpty(BadNewsSheet.Cells[excelRow, 8].Value.ToString().ToLower().Trim()) ? "false" : BadNewsSheet.Cells[excelRow, 8].Value.ToString().Trim().ToLower();
+
+                    if (ImageShowCheck == "true")
+                    {
+                        ImageBadNewsCheck.Checked = true;
+                    }
+                    else
+                        ImageBadNewsCheck.Checked = false;
+
+                    package.Dispose();
+                }
+
+                //load badnews image
+                var currentImagePath = Directory.GetCurrentDirectory() + "\\BadNewsImage\\";
+                string[] currentImages = Directory.GetFiles(currentImagePath);
+
+                if (currentImages.Length >= 1)
+                {
+                    Image tempImage = Image.FromFile(currentImages[0]);
+                    badnewsPicBox.Image = tempImage;
+                }
+
+                eventDTGV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                this.eventDTGV.RowsDefaultCellStyle.BackColor = Color.White;
+                this.eventDTGV.AlternatingRowsDefaultCellStyle.BackColor = Color.Linen;
+                eventDTGV.RowHeadersVisible = false;
+
+
+                var dataTbl = new DataTable();
+                DataColumn dc = new DataColumn("Loại thông báo", typeof(String));
+                dataTbl.Columns.Add(dc);
+
+                dc = new DataColumn("Họ Tên", typeof(String));
+                dataTbl.Columns.Add(dc);
+
+                dc = new DataColumn("Phòng ban", typeof(String));
+                dataTbl.Columns.Add(dc);
+
+                using (ExcelPackage package = new ExcelPackage(sourceFile))
+                {
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    //get the first worksheet in the workbook
+                    ExcelWorksheet EventSheet = package.Workbook.Worksheets[4];
+                    ExcelWorksheet TimeSheet = package.Workbook.Worksheets[5];
+                    ExcelWorksheet RemindSheet = package.Workbook.Worksheets[6];
+
+                    int colCount = EventSheet.Dimension.End.Column;  //get Column Count
+                    int rowCount = EventSheet.Dimension.End.Row;     //get row count
+
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+
+                        DataRow dr = dataTbl.NewRow();
+                        dr[0] = EventSheet.Cells[row, 1].Value.ToString().Trim();
+                        dr[1] = EventSheet.Cells[row, 2].Value.ToString().Trim();
+                        dr[2] = EventSheet.Cells[row, 3].Value.ToString().Trim();
+                        dataTbl.Rows.Add(dr);
+                    }
+
+                    int rowTimeCount = TimeSheet.Dimension.End.Row;
+
+                    if (rowTimeCount > 1)
+                    {
+                        CalenderTimeTb.Text = TimeSheet.Cells[2, 1].Value.ToString().Trim();
+                        BirthdayTimeTb.Text = TimeSheet.Cells[2, 2].Value.ToString().Trim();
+                        BadnewsTimeTb.Text = TimeSheet.Cells[2, 3].Value.ToString().Trim();
+                        EventTimeTb.Text = TimeSheet.Cells[2, 4].Value.ToString().Trim();
+                        ImageSlideTb.Text = TimeSheet.Cells[2, 8].Value.ToString().Trim();
+
+                        if (TimeSheet.Cells[2, 5].Value.ToString().Trim() == "true")
+                            BadnewsCheckBox.Checked = true;
+                        else
+                            BadnewsCheckBox.Checked = false;
+
+                        if (TimeSheet.Cells[2, 6].Value.ToString().Trim() == "true")
+                            EventcheckBox.Checked = true;
+                        else
+                            EventcheckBox.Checked = false;
+
+                        if (TimeSheet.Cells[2, 7].Value.ToString().Trim() == "true")
+                            ImageSlideCheckBox.Checked = true;
+                        else
+                            ImageSlideCheckBox.Checked = false;
+
+                    }
+
+
+                    #region Remind Date loading
+                    RemindDayDTGV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    this.RemindDayDTGV.RowsDefaultCellStyle.BackColor = Color.White;
+                    this.RemindDayDTGV.AlternatingRowsDefaultCellStyle.BackColor = Color.Linen;
+                    RemindDayDTGV.RowHeadersVisible = false;
+
+                    var RemindTbl = new DataTable();
+                    DataColumn dcol = new DataColumn("Ngày", typeof(String));
+                    RemindTbl.Columns.Add(dcol);
+
+                    dcol = new DataColumn("Tháng", typeof(String));
+                    RemindTbl.Columns.Add(dcol);
+
+
+                    int rowRemindCount = RemindSheet.Dimension.End.Row;     //get row count
+
+                    for (int row = 2; row <= rowRemindCount; row++)
+                    {
+                        DataRow dr = RemindTbl.NewRow();
+                        dr[0] = RemindSheet.Cells[row, 1].Value.ToString().Trim();
+                        dr[1] = RemindSheet.Cells[row, 2].Value.ToString().Trim();
+                        RemindTbl.Rows.Add(dr);
+                    }
+
+                    #endregion
+
+                    package.Dispose();
+                    eventDTGV.DataSource = dataTbl;
+                    RemindDayDTGV.DataSource = RemindTbl;
+
+                    eventDTGV.ReadOnly = true;
+                    DataGridViewColumn eventTypeColumn = eventDTGV.Columns[0];
+                    DataGridViewColumn eventNameColumn = eventDTGV.Columns[1];
+                    DataGridViewColumn eventDepartmentColumn = eventDTGV.Columns[2];
+                    eventTypeColumn.Width = 200;
+                    eventNameColumn.Width = 350;
+                    eventDepartmentColumn.Width = 500;
+
+                    RemindDayDTGV.ReadOnly = true;
+                    DataGridViewColumn RemindDayColumn = RemindDayDTGV.Columns[0];
+                    DataGridViewColumn RemindMonthColumn = RemindDayDTGV.Columns[1];
+                    RemindDayColumn.Width = 120;
+                    RemindMonthColumn.Width = 120;
+                }
             }
-
-            eventDTGV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            this.eventDTGV.RowsDefaultCellStyle.BackColor = Color.White;
-            this.eventDTGV.AlternatingRowsDefaultCellStyle.BackColor = Color.Linen;
-            eventDTGV.RowHeadersVisible = false;
-
-
-            var dataTbl = new DataTable();
-            DataColumn dc = new DataColumn("Loại thông báo", typeof(String));
-            dataTbl.Columns.Add(dc);
-
-            dc = new DataColumn("Họ Tên", typeof(String));
-            dataTbl.Columns.Add(dc);
-
-            dc = new DataColumn("Phòng ban", typeof(String));
-            dataTbl.Columns.Add(dc);
-
-            using (ExcelPackage package = new ExcelPackage(sourceFile))
+            catch(Exception ex)
             {
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                //get the first worksheet in the workbook
-                ExcelWorksheet EventSheet = package.Workbook.Worksheets[4];
-                ExcelWorksheet TimeSheet = package.Workbook.Worksheets[5];
-                ExcelWorksheet RemindSheet = package.Workbook.Worksheets[6];
-
-                int colCount = EventSheet.Dimension.End.Column;  //get Column Count
-                int rowCount = EventSheet.Dimension.End.Row;     //get row count
-
-                for (int row = 2; row <= rowCount; row++)
-                {
-
-                    DataRow dr = dataTbl.NewRow();
-                    dr[0] = EventSheet.Cells[row, 1].Value.ToString().Trim();
-                    dr[1] = EventSheet.Cells[row, 2].Value.ToString().Trim();
-                    dr[2] = EventSheet.Cells[row, 3].Value.ToString().Trim();
-                    dataTbl.Rows.Add(dr);
-                }
-
-                int rowTimeCount = TimeSheet.Dimension.End.Row;
-
-                if (rowTimeCount > 1)
-                {
-                    CalenderTimeTb.Text = TimeSheet.Cells[2, 1].Value.ToString().Trim();
-                    BirthdayTimeTb.Text = TimeSheet.Cells[2, 2].Value.ToString().Trim();
-                    BadnewsTimeTb.Text = TimeSheet.Cells[2, 3].Value.ToString().Trim();
-                    EventTimeTb.Text = TimeSheet.Cells[2, 4].Value.ToString().Trim();
-                    ImageSlideTb.Text = TimeSheet.Cells[2, 8].Value.ToString().Trim();
-
-                    if (TimeSheet.Cells[2, 5].Value.ToString().Trim() == "true")
-                        BadnewsCheckBox.Checked = true;
-                    else
-                        BadnewsCheckBox.Checked = false;
-
-                    if (TimeSheet.Cells[2, 6].Value.ToString().Trim() == "true")
-                        EventcheckBox.Checked = true;
-                    else
-                        EventcheckBox.Checked = false;
-
-                    if (TimeSheet.Cells[2, 7].Value.ToString().Trim() == "true")
-                        ImageSlideCheckBox.Checked = true;
-                    else
-                        ImageSlideCheckBox.Checked = false;
-
-                }
-
-
-                #region Remind Date loading
-                RemindDayDTGV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                this.RemindDayDTGV.RowsDefaultCellStyle.BackColor = Color.White;
-                this.RemindDayDTGV.AlternatingRowsDefaultCellStyle.BackColor = Color.Linen;
-                RemindDayDTGV.RowHeadersVisible = false;
-
-                var RemindTbl = new DataTable();
-                DataColumn dcol = new DataColumn("Ngày", typeof(String));
-                RemindTbl.Columns.Add(dcol);
-
-                dcol = new DataColumn("Tháng", typeof(String));
-                RemindTbl.Columns.Add(dcol);
-
-
-                int rowRemindCount = RemindSheet.Dimension.End.Row;     //get row count
-
-                for (int row = 2; row <= rowRemindCount; row++)
-                {
-                    DataRow dr = RemindTbl.NewRow();
-                    dr[0] = RemindSheet.Cells[row, 1].Value.ToString().Trim();
-                    dr[1] = RemindSheet.Cells[row, 2].Value.ToString().Trim();
-                    RemindTbl.Rows.Add(dr);
-                }
-
-                #endregion
-
-                package.Dispose();
-                eventDTGV.DataSource = dataTbl;
-                RemindDayDTGV.DataSource = RemindTbl;
-
-                eventDTGV.ReadOnly = true;
-                DataGridViewColumn eventTypeColumn = eventDTGV.Columns[0];
-                DataGridViewColumn eventNameColumn = eventDTGV.Columns[1];
-                DataGridViewColumn eventDepartmentColumn = eventDTGV.Columns[2];
-                eventTypeColumn.Width = 200;
-                eventNameColumn.Width = 350;
-                eventDepartmentColumn.Width = 500;
-
-                RemindDayDTGV.ReadOnly = true;
-                DataGridViewColumn RemindDayColumn = RemindDayDTGV.Columns[0];
-                DataGridViewColumn RemindMonthColumn = RemindDayDTGV.Columns[1];
-                RemindDayColumn.Width = 120;
-                RemindMonthColumn.Width = 120;
+                MessageBox.Show("Lỗi: " + ex.Message, "Thông báo", MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 
@@ -730,6 +755,78 @@ namespace OfficeSoftware
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void AddBadNewsImage_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            openDialog.Title = "Chọn hình cần trình chiếu";
+            openDialog.Multiselect = true;
+            openDialog.Filter = "File hình ảnh|*.png;*.jpeg; *.jpg; *.bmp";
+
+            var ImagePath = Directory.GetCurrentDirectory() + "\\BadNewsImage\\";
+
+            if (openDialog.ShowDialog() == DialogResult.OK)
+            {
+                string[] files = Directory.GetFiles(ImagePath);
+
+                for (int i = BadNewsImgPanel.Controls.Count - 1; i >= 0; i--)
+                {
+                    if (BadNewsImgPanel.Controls[i] is PictureBox)
+                    {
+                        BadNewsImgPanel.Controls[i].Dispose();
+                    }
+                }
+
+                if (files.Length > 0)
+                {
+                    badnewsPicBox.Image.Dispose();
+                    foreach (var file in files)
+                    {
+                        File.Delete(file);
+                    }
+                }
+
+                foreach (var item in openDialog.FileNames)
+                {
+                    string[] fileDir = item.Split("\\");
+                    string fileName = fileDir[(fileDir.Length) - 1];
+
+                    //fileName = $"{imageNum}"
+                    var DetailImagePath = ImagePath + fileName;
+                    File.Copy(item, DetailImagePath, true);
+
+                }
+
+                #region Load uploaded images
+                var currentImagePath = Directory.GetCurrentDirectory() + "\\BadNewsImage\\";
+                string[] currentImages = Directory.GetFiles(currentImagePath);
+
+                badnewsPicBox.Visible = true;
+
+                if(currentImages.Length>=1)
+                {
+                    PictureBox pic = new PictureBox();
+                    pic.Size = BadNewsImgPanel.Size;
+                    pic.Dock = DockStyle.Fill;
+                    pic.Location = new Point(0, 0);
+                    pic.SizeMode = PictureBoxSizeMode.Zoom;
+
+                    Image tempImage = Image.FromFile(currentImages[0]);
+                    Bitmap tempBitmap = new Bitmap(tempImage);
+                    pic.Image = tempBitmap;
+                    BadNewsImgPanel.Controls.Add(pic);
+                    //badnewsPicBox.Update();
+                    //badnewsPicBox.Refresh();
+                    tempImage.Dispose();
+                    
+                }
+
+                #endregion
+
+                MessageBox.Show("Upload hình ảnh thành công", "Cập nhật hình ảnh tin buồn");
+                //badnewsPicBox.Image = Image.FromFile(currentImages[0]);
             }
         }
     }

@@ -70,6 +70,7 @@ namespace OfficeSoftware.Model
         public List<Participants> THANH_PHAN { get; set; }
         public RoomID ID_PHONG_HOP { get; set; }
         public string PHONG_HOP { get; set; }
+        public string TINH_TRANG { get; set; }
     }
 
     public class RoomID
@@ -97,5 +98,6 @@ namespace OfficeSoftware.Model
         public List<Participants> THANH_PHAN { get; set; }
         public RoomID ID_PHONG_HOP { get; set; }
         public string PHONG_HOP { get; set; }
+        
     }
 }

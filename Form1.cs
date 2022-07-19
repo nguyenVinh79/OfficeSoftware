@@ -143,12 +143,44 @@ namespace OfficeSoftware
             //birthdayString += "Trần Trương Hân-P6(1/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
             //birthdayString += "Trần Thanh Trường-VP(2/3)&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
 
-            var BirthdayInMonthList = EmployeeBirthdayList.Where(x => (Convert.ToDateTime(x.Date).Month == DateTime.Now.Month) &&
-                (Convert.ToDateTime(x.Date).Day >= DateTime.Now.Day)).ToList();
+            List<SortingBirthdayEntity> SortedEmployeeBirthdayList = new List<SortingBirthdayEntity>();
+
+            foreach(var item in EmployeeBirthdayList)
+            {
+                SortedEmployeeBirthdayList.Add(new SortingBirthdayEntity {
+                    Name = item.Name,
+                    Date = Convert.ToDateTime(item.Date),
+                    Department = item.Department,
+                    Position = item.Position,
+                    Gender = item.Gender
+                });
+
+            }
+
+            //SortedEmployeeBirthdayList = SortedEmployeeBirthdayList.ToList();
+
+            SortedEmployeeBirthdayList = SortedEmployeeBirthdayList.Where(x => (x.Date.Month == DateTime.Now.Month) && (x.Date.Day >= DateTime.Now.Day)).ToList();
+
+            SortedEmployeeBirthdayList = SortedEmployeeBirthdayList.OrderBy(x => x.Date.Day).ToList();
+
+            EmployeeBirthdayList.RemoveRange(0,EmployeeBirthdayList.Count);
+
+            foreach(var item in SortedEmployeeBirthdayList)
+            {
+                EmployeeBirthdayList.Add(new BirthdayEntity
+                {
+                    Name = item.Name,
+                    Date = item.Date.ToString("dd/MM/yyyy"),
+                    Department = item.Department,
+                    Position = item.Position,
+                    Gender = item.Gender
+                });
+            }
+
+            var BirthdayInMonthList = EmployeeBirthdayList;
 
             foreach (var item in BirthdayInMonthList)
             {
-                
 
                 birthdayString += item.Name+"-"+item.Department + " ("+ item.Date.Substring(0,5) +")";
                 birthdayString += "&nbsp&nbsp&nbsp&#127873;&nbsp&nbsp&nbsp";
@@ -322,7 +354,9 @@ namespace OfficeSoftware
 
         private void CalendarBtn_Click(object sender, EventArgs e)
         {
+            SettingButton.Enabled = false;
             OpenChildForm(new CalendarForm());
+            SettingButton.Enabled = true;
         }
 
         private void eventBtn_Click(object sender, EventArgs e)

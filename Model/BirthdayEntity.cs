@@ -12,4 +12,13 @@ namespace OfficeSoftware.Model
         public string Position { get; set; }
         public string Gender { get; set; }
     }
+
+    class SortingBirthdayEntity
+    {
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+        public string Department { get; set; }
+        public string Position { get; set; }
+        public string Gender { get; set; }
+    }
 }

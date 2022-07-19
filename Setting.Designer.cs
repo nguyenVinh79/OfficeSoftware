@@ -42,6 +42,10 @@
             this.DeleteRemindBtn = new System.Windows.Forms.Button();
             this.labelRemindDay = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.BadNewsImgPanel = new System.Windows.Forms.Panel();
+            this.badnewsPicBox = new System.Windows.Forms.PictureBox();
+            this.ImageBadNewsCheck = new System.Windows.Forms.CheckBox();
+            this.AddBadNewsImage = new FontAwesome.Sharp.IconButton();
             this.PositionTb = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.BadNewsSaveBtn = new System.Windows.Forms.Button();
@@ -93,6 +97,8 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RemindDayDTGV)).BeginInit();
             this.groupBox2.SuspendLayout();
+            this.BadNewsImgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.badnewsPicBox)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventDTGV)).BeginInit();
             this.groupBox4.SuspendLayout();
@@ -241,6 +247,9 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.BadNewsImgPanel);
+            this.groupBox2.Controls.Add(this.ImageBadNewsCheck);
+            this.groupBox2.Controls.Add(this.AddBadNewsImage);
             this.groupBox2.Controls.Add(this.PositionTb);
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.BadNewsSaveBtn);
@@ -264,10 +273,54 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tin Buồn";
             // 
+            // BadNewsImgPanel
+            // 
+            this.BadNewsImgPanel.Controls.Add(this.badnewsPicBox);
+            this.BadNewsImgPanel.Location = new System.Drawing.Point(1322, 57);
+            this.BadNewsImgPanel.Name = "BadNewsImgPanel";
+            this.BadNewsImgPanel.Size = new System.Drawing.Size(254, 258);
+            this.BadNewsImgPanel.TabIndex = 6;
+            // 
+            // badnewsPicBox
+            // 
+            this.badnewsPicBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.badnewsPicBox.Location = new System.Drawing.Point(0, 0);
+            this.badnewsPicBox.Name = "badnewsPicBox";
+            this.badnewsPicBox.Size = new System.Drawing.Size(254, 258);
+            this.badnewsPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.badnewsPicBox.TabIndex = 0;
+            this.badnewsPicBox.TabStop = false;
+            // 
+            // ImageBadNewsCheck
+            // 
+            this.ImageBadNewsCheck.AutoSize = true;
+            this.ImageBadNewsCheck.Location = new System.Drawing.Point(569, 253);
+            this.ImageBadNewsCheck.Name = "ImageBadNewsCheck";
+            this.ImageBadNewsCheck.Size = new System.Drawing.Size(174, 32);
+            this.ImageBadNewsCheck.TabIndex = 4;
+            this.ImageBadNewsCheck.Text = "Trình chiếu ảnh";
+            this.ImageBadNewsCheck.UseVisualStyleBackColor = true;
+            // 
+            // AddBadNewsImage
+            // 
+            this.AddBadNewsImage.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.AddBadNewsImage.IconChar = FontAwesome.Sharp.IconChar.Plus;
+            this.AddBadNewsImage.IconColor = System.Drawing.Color.Black;
+            this.AddBadNewsImage.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.AddBadNewsImage.IconSize = 30;
+            this.AddBadNewsImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.AddBadNewsImage.Location = new System.Drawing.Point(683, 291);
+            this.AddBadNewsImage.Name = "AddBadNewsImage";
+            this.AddBadNewsImage.Size = new System.Drawing.Size(130, 50);
+            this.AddBadNewsImage.TabIndex = 5;
+            this.AddBadNewsImage.Text = "    Thêm ảnh";
+            this.AddBadNewsImage.UseVisualStyleBackColor = true;
+            this.AddBadNewsImage.Click += new System.EventHandler(this.AddBadNewsImage_Click);
+            // 
             // PositionTb
             // 
             this.PositionTb.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.PositionTb.Location = new System.Drawing.Point(174, 241);
+            this.PositionTb.Location = new System.Drawing.Point(101, 248);
             this.PositionTb.Multiline = true;
             this.PositionTb.Name = "PositionTb";
             this.PositionTb.Size = new System.Drawing.Size(331, 75);
@@ -276,7 +329,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(52, 248);
+            this.label19.Location = new System.Drawing.Point(7, 248);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(85, 28);
             this.label19.TabIndex = 0;
@@ -284,7 +337,7 @@
             // 
             // BadNewsSaveBtn
             // 
-            this.BadNewsSaveBtn.Location = new System.Drawing.Point(609, 275);
+            this.BadNewsSaveBtn.Location = new System.Drawing.Point(568, 291);
             this.BadNewsSaveBtn.Name = "BadNewsSaveBtn";
             this.BadNewsSaveBtn.Size = new System.Drawing.Size(94, 50);
             this.BadNewsSaveBtn.TabIndex = 4;
@@ -295,7 +348,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(609, 50);
+            this.label6.Location = new System.Drawing.Point(443, 50);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(126, 28);
             this.label6.TabIndex = 0;
@@ -304,7 +357,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(609, 104);
+            this.label5.Location = new System.Drawing.Point(443, 104);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(92, 28);
             this.label5.TabIndex = 0;
@@ -313,7 +366,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(609, 185);
+            this.label4.Location = new System.Drawing.Point(443, 177);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(110, 28);
             this.label4.TabIndex = 0;
@@ -322,7 +375,7 @@
             // BadTime
             // 
             this.BadTime.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BadTime.Location = new System.Drawing.Point(752, 50);
+            this.BadTime.Location = new System.Drawing.Point(569, 57);
             this.BadTime.Name = "BadTime";
             this.BadTime.Size = new System.Drawing.Size(747, 32);
             this.BadTime.TabIndex = 1;
@@ -330,25 +383,25 @@
             // BadVisit
             // 
             this.BadVisit.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BadVisit.Location = new System.Drawing.Point(752, 98);
+            this.BadVisit.Location = new System.Drawing.Point(569, 105);
             this.BadVisit.Multiline = true;
             this.BadVisit.Name = "BadVisit";
-            this.BadVisit.Size = new System.Drawing.Size(747, 81);
+            this.BadVisit.Size = new System.Drawing.Size(747, 66);
             this.BadVisit.TabIndex = 2;
             // 
             // BadBury
             // 
             this.BadBury.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BadBury.Location = new System.Drawing.Point(752, 185);
+            this.BadBury.Location = new System.Drawing.Point(569, 177);
             this.BadBury.Multiline = true;
             this.BadBury.Name = "BadBury";
-            this.BadBury.Size = new System.Drawing.Size(747, 83);
+            this.BadBury.Size = new System.Drawing.Size(747, 76);
             this.BadBury.TabIndex = 3;
             // 
             // BadPosition
             // 
             this.BadPosition.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BadPosition.Location = new System.Drawing.Point(174, 151);
+            this.BadPosition.Location = new System.Drawing.Point(101, 158);
             this.BadPosition.Multiline = true;
             this.BadPosition.Name = "BadPosition";
             this.BadPosition.Size = new System.Drawing.Size(331, 75);
@@ -357,7 +410,7 @@
             // BadYear
             // 
             this.BadYear.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BadYear.Location = new System.Drawing.Point(174, 97);
+            this.BadYear.Location = new System.Drawing.Point(101, 104);
             this.BadYear.Name = "BadYear";
             this.BadYear.Size = new System.Drawing.Size(331, 32);
             this.BadYear.TabIndex = 2;
@@ -365,7 +418,7 @@
             // BadName
             // 
             this.BadName.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BadName.Location = new System.Drawing.Point(174, 50);
+            this.BadName.Location = new System.Drawing.Point(101, 57);
             this.BadName.Name = "BadName";
             this.BadName.Size = new System.Drawing.Size(331, 32);
             this.BadName.TabIndex = 1;
@@ -373,7 +426,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(52, 158);
+            this.label3.Location = new System.Drawing.Point(7, 158);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 28);
             this.label3.TabIndex = 0;
@@ -382,7 +435,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(52, 104);
+            this.label2.Location = new System.Drawing.Point(7, 104);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 28);
             this.label2.TabIndex = 0;
@@ -391,7 +444,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(52, 50);
+            this.label1.Location = new System.Drawing.Point(7, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 28);
             this.label1.TabIndex = 0;
@@ -759,6 +812,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.RemindDayDTGV)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.BadNewsImgPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.badnewsPicBox)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventDTGV)).EndInit();
@@ -838,5 +893,9 @@
         private System.Windows.Forms.CheckBox ImageSlideCheckBox;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.TextBox ImageSlideTb;
+        private System.Windows.Forms.CheckBox ImageBadNewsCheck;
+        private FontAwesome.Sharp.IconButton AddBadNewsImage;
+        private System.Windows.Forms.Panel BadNewsImgPanel;
+        private System.Windows.Forms.PictureBox badnewsPicBox;
     }
 }

@@ -45,7 +45,7 @@ namespace OfficeSoftware
 
             await Task.Run(() => LoadingCalendarTable());
         }
-        
+
 
         private void CalendarDTGV_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -80,7 +80,7 @@ namespace OfficeSoftware
             ScrollTimer.Enabled = true;
         }
 
-       
+
 
         private void CalendarDTGV_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
@@ -124,19 +124,6 @@ namespace OfficeSoftware
             try
             {
                 #region get web data
-                var html = new HtmlWeb();
-                var doc = html.Load("http://10.67.0.6/lichtuan/");
-                var birthdayMarquee = html.Load("http://10.67.0.4/pecc4/GUI/Pages/Article.aspx");
-                //var doc = html.Load("http://113.160.248.233/lichtuan/")  http://10.67.0.6/lichtuan/;
-
-
-                var table = doc.DocumentNode.SelectSingleNode("//table[@id='RadGrid5_ctl00']");
-                DataRaw = table.Descendants("tr")
-                            .Skip(1)
-                            .Select(tr => tr.Descendants("td")
-                                            .Select(td => WebUtility.HtmlDecode(td.InnerText).Trim())
-                                            .ToList())
-                            .ToList();
 
                 WebClient client = new WebClient();
                 var userDataPara = new UserLoginDOffice()
@@ -155,11 +142,6 @@ namespace OfficeSoftware
                 string data = JsonConvert.SerializeObject(userDataPara);
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
                 string respond = client.UploadString("https://gwdoffice.pecc4.vn/v2/auth/Auth/DAuth", "POST", data);
-
-                //if (respond ==  "true")
-                //{
-                //    string json = client.DownloadString("https://gwdoffice.pecc4.vn/v2/auth/Auth/DAuth");
-                //}    
 
                 UserInfo userInfo = JsonConvert.DeserializeObject<UserInfo>(respond);
 
@@ -188,30 +170,83 @@ namespace OfficeSoftware
                     ID_CHUAN_BI = 0
                 };
 
+                CalendarRequest editedCalendarRequest = new CalendarRequest()
+                {
+                    ID_DV = "404",
+                    TU_NGAY = currentDay,
+                    DEN_NGAY = sevenDayafter,
+                    LOAI_LICH = "Lịch Ban",
+                    TINH_TRANG = "BO_SUNG",
+                    ID_PB_DK = 0,
+                    ID_NV_DK = 0,
+                    HNTH = 0,
+                    MAY_CHIEU = 0,
+                    CHU_TRI = "ALL",
+                    ID_CHU_TRI = 0,
+                    THANH_PHAN = "ALL",
+                    ID_THANH_PHAN = 0,
+                    CHUAN_BI = "ALL",
+                    ID_CHUAN_BI = 0
+                };
+
+                string editedCalendarRequestJson = JsonConvert.SerializeObject(editedCalendarRequest);
+                string editedCalendarResultString = client.UploadString("https://gwdoffice.pecc4.vn/v1/lichtuan/LichTuan/SelectLichTuan", "POST", editedCalendarRequestJson);
+
+                client.Headers[HttpRequestHeader.Authorization] = "Bearer " + userInfo.Data.accessToken;
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+
                 string calendarRequestJson = JsonConvert.SerializeObject(calendarRequest);
                 string CalendarResultString = client.UploadString("https://gwdoffice.pecc4.vn/v1/lichtuan/LichTuan/SelectLichTuan", "POST", calendarRequestJson);
+
+
                 CalendarDetailInfo CalendarObj = JsonConvert.DeserializeObject<CalendarDetailInfo>(CalendarResultString);
+                CalendarDetailInfo EditedCalendarObj = JsonConvert.DeserializeObject<CalendarDetailInfo>(editedCalendarResultString);
+
+                if (EditedCalendarObj.Data != null)
+                {
+                    CalendarObj.Data.AddRange(EditedCalendarObj.Data);
+                }
+
                 List<ProcessedCalendarData> calendarProcessedData = new List<ProcessedCalendarData>();
-                    
+
                 if (CalendarObj.Data != null)
                 {
                     if (CalendarObj.Message == "200")
                     {
                         if (CalendarObj.Data.Count > 0)
                         {
-                            foreach(var calendarRawItem in CalendarObj.Data)
+                            foreach (var calendarRawItem in CalendarObj.Data)
                             {
-                                calendarProcessedData.Add(new ProcessedCalendarData {
-                                    NOI_DUNG = calendarRawItem.NOI_DUNG,
-                                    THOI_GIAN_BD = DateTime.ParseExact(calendarRawItem.THOI_GIAN_BD, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
-                                    THOI_GIAN_KT = DateTime.ParseExact(calendarRawItem.THOI_GIAN_KT, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
-                                    NGAY_HOP = DateTime.ParseExact(calendarRawItem.NGAY_HOP, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
-                                    CHU_TRI = calendarRawItem.CHU_TRI,
-                                    CHUAN_BI = calendarRawItem.CHUAN_BI,
-                                    THANH_PHAN = calendarRawItem.THANH_PHAN,
-                                    ID_PHONG_HOP = calendarRawItem.ID_PHONG_HOP,
-                                    PHONG_HOP = calendarRawItem.PHONG_HOP
-                                });
+                                if (calendarRawItem.TINH_TRANG == "DA_DUYET")
+                                {
+                                    calendarProcessedData.Add(new ProcessedCalendarData
+                                    {
+                                        NOI_DUNG = calendarRawItem.NOI_DUNG,
+                                        THOI_GIAN_BD = DateTime.ParseExact(calendarRawItem.THOI_GIAN_BD, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                        THOI_GIAN_KT = DateTime.ParseExact(calendarRawItem.THOI_GIAN_KT, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                        NGAY_HOP = DateTime.ParseExact(calendarRawItem.NGAY_HOP, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                        CHU_TRI = calendarRawItem.CHU_TRI,
+                                        CHUAN_BI = calendarRawItem.CHUAN_BI,
+                                        THANH_PHAN = calendarRawItem.THANH_PHAN,
+                                        ID_PHONG_HOP = calendarRawItem.ID_PHONG_HOP,
+                                        PHONG_HOP = calendarRawItem.PHONG_HOP
+                                    });
+                                }
+                                else if (calendarRawItem.TINH_TRANG == "BO_SUNG")
+                                {
+                                    calendarProcessedData.Add(new ProcessedCalendarData
+                                    {
+                                        NOI_DUNG = calendarRawItem.NOI_DUNG,
+                                        THOI_GIAN_BD = DateTime.ParseExact(calendarRawItem.THOI_GIAN_BD, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                        THOI_GIAN_KT = DateTime.ParseExact(calendarRawItem.THOI_GIAN_KT, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                        NGAY_HOP = DateTime.ParseExact(calendarRawItem.NGAY_HOP, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture).ToUniversalTime(),
+                                        CHU_TRI = calendarRawItem.CHU_TRI,
+                                        CHUAN_BI = calendarRawItem.CHUAN_BI,
+                                        THANH_PHAN = calendarRawItem.THANH_PHAN,
+                                        ID_PHONG_HOP = calendarRawItem.ID_PHONG_HOP,
+                                        PHONG_HOP = calendarRawItem.ID_PHONG_HOP.TEN_PHONG
+                                    });
+                                }
                             }
 
                             calendarProcessedData = calendarProcessedData.OrderBy(x => x.NGAY_HOP).ToList();
@@ -232,7 +267,7 @@ namespace OfficeSoftware
                                 //    meetingPrepare += prepareItem.TEN + "\r\n";
                                 //}
 
-                                meetingPrepare = calendarItem.PHONG_HOP;
+                                meetingPrepare = calendarItem.CHUAN_BI[0].TEN;
 
                                 foreach (var participantItem in calendarItem.THANH_PHAN)
                                 {
@@ -270,7 +305,7 @@ namespace OfficeSoftware
             CalendarDTGV.Invoke((MethodInvoker)(() => this.CalendarDTGV.RowsDefaultCellStyle.BackColor = Color.FromArgb(228, 251, 255)));
             CalendarDTGV.Invoke((MethodInvoker)(() => CalendarDTGV.RowHeadersVisible = false));
             //this.CalendarDTGV.AlternatingRowsDefaultCellStyle.BackColor = Color.Linen;
-            
+
 
             var dataTbl = new DataTable();
             DataTable DataTableShow = new DataTable();
@@ -417,14 +452,14 @@ namespace OfficeSoftware
             DataGridViewColumn calendarColumnHost = CalendarDTGV.Columns[5];
             DataGridViewColumn calendarColumnParticipant = CalendarDTGV.Columns[6];
 
-            
-            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnDate.Width = 36));
-            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnTime.Width = 28));
-            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnRoom.Width = 48));
-            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnContent.Width = 170));
-            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnPrepare.Width = 65));
-            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnHost.Width = 48));
-            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnParticipant.Width = 195));
+
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnDate.Width = (int)(CalendarDTGV.Width * 0.06)));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnTime.Width = (int)(CalendarDTGV.Width * 0.06)));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnRoom.Width = (int)(CalendarDTGV.Width * 0.1)));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnContent.Width = (int)(CalendarDTGV.Width * 0.26)));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnPrepare.Width = (int)(CalendarDTGV.Width * 0.16)));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnHost.Width = (int)(CalendarDTGV.Width * 0.16)));
+            CalendarDTGV.Invoke((MethodInvoker)(() => calendarColumnParticipant.Width = (int)(CalendarDTGV.Width * 0.2)));
 
 
             #endregion
